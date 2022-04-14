@@ -8,9 +8,9 @@ import java.lang.Exception
 class StatsRepository {
     suspend fun getUserDetails(id: String): UserDetails {
         try {
-            return NetworkService.stats.getUserDetails(id);
+            return NetworkService.stats.getUserDetails(id)
         } catch (e: Exception) {
-            Log.e("repos", e.message ?: "");
+            Log.e("repos", e.message ?: "")
         }
         return UserDetails()
     }
