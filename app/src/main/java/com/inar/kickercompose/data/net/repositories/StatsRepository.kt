@@ -1,12 +1,13 @@
-package com.inar.kickercompose.data.net
+package com.inar.kickercompose.data.net.repositories
 
 import android.util.Log
 import com.inar.kickercompose.data.models.UserDetails
-import retrofit2.Call
+import com.inar.kickercompose.data.net.NetworkService
 import java.lang.Exception
+import javax.inject.Inject
 
-class StatsRepository {
-    suspend fun getUserDetails(id: String): UserDetails {
+class StatsRepository @Inject constructor() : IStatsRepository {
+    override suspend fun getUserDetails(id: String): UserDetails {
         try {
             return NetworkService.stats.getUserDetails(id)
         } catch (e: Exception) {

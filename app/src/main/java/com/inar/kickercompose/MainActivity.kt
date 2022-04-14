@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -21,7 +22,9 @@ import androidx.navigation.compose.rememberNavController
 import com.inar.kickercompose.ui.*
 import com.inar.kickercompose.ui.mypage.MyPage
 import com.inar.kickercompose.ui.theme.KickerComposeTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +55,8 @@ fun MainScreen(name: String) {
 
 @Composable
 fun Navigation(navHostController: NavHostController) {
-    val vm: TestViewModel = viewModel();
+    val vm: TestViewModel = hiltViewModel();
+
     NavHost(navController = navHostController, NavigationItems.Leaderboard.route) {
         composable(NavigationItems.Leaderboard.route) {
             Leaderboard();

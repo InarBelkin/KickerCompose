@@ -2,16 +2,18 @@ package com.inar.kickercompose.ui
 
 import androidx.lifecycle.*
 import com.inar.kickercompose.data.models.UserDetails
-import com.inar.kickercompose.data.net.StatsRepository
-import kotlinx.coroutines.Dispatchers
+import com.inar.kickercompose.data.net.repositories.IStatsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class TestViewModel : ViewModel(
+@HiltViewModel
+class TestViewModel @Inject constructor(
+    private val repository: IStatsRepository
+) : ViewModel() {
 
-) {
-
-    private val repository = StatsRepository();
+    //private val repository = StatsRepository();
 
     val counterLiveData: LiveData<Int>
         get() = counter
@@ -24,13 +26,13 @@ class TestViewModel : ViewModel(
     }
 
 
-    val UserDetailLiveData: LiveData<UserDetails>
-        get() = userDetailsLd
+    val userDetailsLiveData: LiveData<UserDetails>
+        get() = _userDetailsLd
 
-    private val userDetailsLd = MutableLiveData(UserDetails());
+    private val _userDetailsLd = MutableLiveData(UserDetails());
 
-    fun loadUserDetails(userId: String): Job =
-        viewModelScope.launch {
-            userDetailsLd.value = repository.getUserDetails(userId);
-        }
+    suspend fun loadUserDetails(userId: String) {
+        _userDetailsLd.value = repository.getUserDetails(userId);
+    }
+
 }

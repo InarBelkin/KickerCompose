@@ -7,6 +7,6 @@ import androidx.compose.runtime.LaunchedEffect
 @Composable
 fun Leaderboard(){
 Text(text = "Leaderboard");
-    LaunchedEffect(key1 = "cat", block = {} )
+
 
 }
