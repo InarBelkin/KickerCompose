@@ -3,6 +3,7 @@ package com.inar.kickercompose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -10,16 +11,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.inar.kickercompose.ui.Leaderboard
-import com.inar.kickercompose.ui.Lobby
-import com.inar.kickercompose.ui.MyPage
-import com.inar.kickercompose.ui.NavigationItems
+import com.inar.kickercompose.ui.*
+import com.inar.kickercompose.ui.mypage.MyPage
 import com.inar.kickercompose.ui.theme.KickerComposeTheme
 
 class MainActivity : ComponentActivity() {
@@ -39,6 +39,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
 @Composable
 fun MainScreen(name: String) {
     val navController = rememberNavController()
@@ -46,23 +47,21 @@ fun MainScreen(name: String) {
         Box(modifier = Modifier.padding(it)) {
             Navigation(navHostController = navController)
         }
-
-
     }
-
 }
 
 @Composable
 fun Navigation(navHostController: NavHostController) {
+    val vm: TestViewModel = viewModel();
     NavHost(navController = navHostController, NavigationItems.Leaderboard.route) {
         composable(NavigationItems.Leaderboard.route) {
             Leaderboard();
         }
         composable(NavigationItems.Lobby.route) {
-            Lobby()
+            Lobby(vm)
         }
         composable(NavigationItems.MyPage.route) {
-            MyPage()
+            MyPage(vm)
         }
     }
 
@@ -99,7 +98,55 @@ fun BottomNavBar(navController: NavController) {
                     }
                 })
         }
+
     }
+
+}
+
+@Composable
+fun Test() {
+    Canvas(modifier = Modifier.fillMaxSize()) {
+    }
+}
+
+@Composable
+fun BottomNavigationBarWithButtons(navController: NavController) {
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+        Button(onClick = {
+            navController.navigate(NavigationItems.Leaderboard.route) {
+                popUpTo(NavigationItems.Leaderboard.route) {
+                    inclusive = true;
+                }
+                launchSingleTop = true;
+
+            }
+        }) {
+            Text(text = "Leaderboard")
+        }
+        Button(onClick = {
+            navController.navigate(NavigationItems.Lobby.route) {
+                popUpTo(NavigationItems.Lobby.route) {
+                    inclusive = true;
+                }
+                launchSingleTop = true;
+
+            }
+        }) {
+            Text(text = "Lobby")
+        }
+        Button(onClick = {
+            navController.navigate(NavigationItems.MyPage.route) {
+                popUpTo(NavigationItems.MyPage.route) {
+                    inclusive = true;
+                }
+                launchSingleTop = true;
+
+            }
+        }) {
+            Text(text = "Me")
+        }
+    }
+
 
 }
 

@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object NetworkService {
     private val mRetrofit: Retrofit;
-    const val BaseUrl = "http://localhost:5093";
+    const val BaseUrl = "http://10.0.2.2:5093/";
 
     init {
         val okHttpClient = OkHttpClient().newBuilder();
