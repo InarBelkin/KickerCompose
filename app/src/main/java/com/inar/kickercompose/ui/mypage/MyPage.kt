@@ -10,7 +10,6 @@ import com.inar.kickercompose.ui.TestViewModel
 @Composable
 fun MyPage(model: TestViewModel) {
 
-    val count by model.counterLiveData.observeAsState(0);
     val user by model.userDetailsLiveData.observeAsState();
 
     LaunchedEffect(Unit) {
@@ -22,12 +21,6 @@ fun MyPage(model: TestViewModel) {
         mutableStateOf(0)
     }
     Column() {
-        Text(text = "vmCat = ${count}");
-        Text(text = "vmCat = ${model.counterLiveData.value}");
-        Button(onClick = { model.increaseCounter() }) {
-
-
-        }
 
         Text(text = "user=  ${user?.name}")
 

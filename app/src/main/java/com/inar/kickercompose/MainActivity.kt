@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -20,6 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.inar.kickercompose.ui.*
+import com.inar.kickercompose.ui.leaderboard.Leaderboard
 import com.inar.kickercompose.ui.mypage.MyPage
 import com.inar.kickercompose.ui.theme.KickerComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -59,7 +59,7 @@ fun Navigation(navHostController: NavHostController) {
 
     NavHost(navController = navHostController, NavigationItems.Leaderboard.route) {
         composable(NavigationItems.Leaderboard.route) {
-            Leaderboard();
+            Leaderboard(vm);
         }
         composable(NavigationItems.Lobby.route) {
             Lobby(vm)
@@ -104,53 +104,6 @@ fun BottomNavBar(navController: NavController) {
         }
 
     }
-
-}
-
-@Composable
-fun Test() {
-    Canvas(modifier = Modifier.fillMaxSize()) {
-    }
-}
-
-@Composable
-fun BottomNavigationBarWithButtons(navController: NavController) {
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-        Button(onClick = {
-            navController.navigate(NavigationItems.Leaderboard.route) {
-                popUpTo(NavigationItems.Leaderboard.route) {
-                    inclusive = true;
-                }
-                launchSingleTop = true;
-
-            }
-        }) {
-            Text(text = "Leaderboard")
-        }
-        Button(onClick = {
-            navController.navigate(NavigationItems.Lobby.route) {
-                popUpTo(NavigationItems.Lobby.route) {
-                    inclusive = true;
-                }
-                launchSingleTop = true;
-
-            }
-        }) {
-            Text(text = "Lobby")
-        }
-        Button(onClick = {
-            navController.navigate(NavigationItems.MyPage.route) {
-                popUpTo(NavigationItems.MyPage.route) {
-                    inclusive = true;
-                }
-                launchSingleTop = true;
-
-            }
-        }) {
-            Text(text = "Me")
-        }
-    }
-
 
 }
 
