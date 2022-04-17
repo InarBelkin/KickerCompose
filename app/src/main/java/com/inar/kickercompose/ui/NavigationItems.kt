@@ -9,6 +9,4 @@ sealed class NavigationItems(var route: String, var icon: Int, var title: String
         NavigationItems("lobby", R.drawable.ic_baseline_people_24, "Lobby");
     object MyPage :
         NavigationItems("my_page", R.drawable.ic_baseline_people_24, "Me");
-
-
 }

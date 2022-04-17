@@ -18,6 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import com.inar.kickercompose.ui.*
 import com.inar.kickercompose.ui.leaderboard.Leaderboard
 import com.inar.kickercompose.ui.mypage.MyPage
@@ -57,10 +58,16 @@ fun MainScreen(name: String) {
 fun Navigation(navHostController: NavHostController) {
     val vm: TestViewModel = hiltViewModel();
 
-    NavHost(navController = navHostController, NavigationItems.Leaderboard.route) {
-        composable(NavigationItems.Leaderboard.route) {
-            Leaderboard(vm);
+    NavHost(navController = navHostController, "lead") {
+        navigation(startDestination = NavigationItems.Leaderboard.route, "lead") {
+            composable(NavigationItems.Leaderboard.route) {
+                Leaderboard(vm);
+            }
         }
+//        composable(NavigationItems.Leaderboard.route) {
+//            Leaderboard(vm);
+//        }
+
         composable(NavigationItems.Lobby.route) {
             Lobby(vm)
         }
@@ -68,7 +75,6 @@ fun Navigation(navHostController: NavHostController) {
             MyPage(vm)
         }
     }
-
 }
 
 @Composable
@@ -81,7 +87,7 @@ fun BottomNavBar(navController: NavController) {
 
     BottomNavigation() {
         val navBackStackEntry by navController.currentBackStackEntryAsState();
-        var currentRoute = navBackStackEntry?.destination?.route;
+        val currentRoute = navBackStackEntry?.destination?.route;
 
         items.forEach { item ->
             BottomNavigationItem(icon = {
