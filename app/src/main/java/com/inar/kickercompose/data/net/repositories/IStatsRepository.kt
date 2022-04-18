@@ -1,10 +1,10 @@
 package com.inar.kickercompose.data.net.repositories
 
 import com.inar.kickercompose.data.models.LeaderboardWrapper
-import com.inar.kickercompose.data.models.LoadedState
-import com.inar.kickercompose.data.models.UserDetails
+import com.inar.kickercompose.other.loadstates.LoadedState
+import com.inar.kickercompose.data.models.userdetails.UserDetails
 
 interface IStatsRepository {
-    suspend fun getUserDetails(id: String): UserDetails
+    suspend fun getUserDetails(id: String): LoadedState<UserDetails>
     suspend fun getLeaderboard(): LoadedState<LeaderboardWrapper>
 }
