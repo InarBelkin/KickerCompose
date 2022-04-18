@@ -20,11 +20,7 @@ fun MyPage(model: TestViewModel) {
     val counter2 = remember {
         mutableStateOf(0)
     }
-    Column() {
 
-        Text(text = "user=  ${user?.name}")
-
-    }
 
 
 }

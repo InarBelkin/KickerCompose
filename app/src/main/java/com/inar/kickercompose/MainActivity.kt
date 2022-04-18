@@ -12,17 +12,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
+import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navigation
+import com.inar.kickercompose.other.strangeNavigate
 import com.inar.kickercompose.ui.*
 import com.inar.kickercompose.ui.leaderboard.Leaderboard
 import com.inar.kickercompose.ui.mypage.MyPage
 import com.inar.kickercompose.ui.theme.KickerComposeTheme
+import com.inar.kickercompose.ui.userpage.UserPage
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -58,21 +58,29 @@ fun MainScreen(name: String) {
 fun Navigation(navHostController: NavHostController) {
     val vm: TestViewModel = hiltViewModel();
 
-    NavHost(navController = navHostController, "lead") {
-        navigation(startDestination = NavigationItems.Leaderboard.route, "lead") {
-            composable(NavigationItems.Leaderboard.route) {
-                Leaderboard(vm);
-            }
+    NavHost(navController = navHostController, NavigationItems.Leaderboard.route) {
+
+        composable(NavigationItems.Leaderboard.route) {
+            Leaderboard(vm, navHostController);
         }
-//        composable(NavigationItems.Leaderboard.route) {
-//            Leaderboard(vm);
-//        }
 
         composable(NavigationItems.Lobby.route) {
             Lobby(vm)
         }
         composable(NavigationItems.MyPage.route) {
             MyPage(vm)
+        }
+
+        composable(
+            NavigationItems.UserPage.route,
+            arguments = listOf(navArgument(NavigationItems.UserPage.userId) {
+                type = NavType.StringType
+            })
+        ) { backStackEntry ->
+            UserPage(
+                vm = vm,
+                userId = backStackEntry.arguments?.getString(NavigationItems.UserPage.userId) ?: ""
+            )
         }
     }
 }
@@ -100,12 +108,7 @@ fun BottomNavBar(navController: NavController) {
                     Text(text = item.title)
                 },
                 selected = currentRoute == item.route, onClick = {
-                    navController.navigate(item.route) {
-                        popUpTo(item.route) {
-                            inclusive = true;
-                        }
-                        launchSingleTop = true;
-                    }
+                    navController.strangeNavigate(item.route)
                 })
         }
 

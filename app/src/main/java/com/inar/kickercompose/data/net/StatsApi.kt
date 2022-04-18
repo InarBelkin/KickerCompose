@@ -1,9 +1,7 @@
 package com.inar.kickercompose.data.net
 
 import com.inar.kickercompose.data.models.LeaderboardWrapper
-import com.inar.kickercompose.data.models.UserDetails
-import com.inar.kickercompose.data.models.UserLeaderboard
-import retrofit2.Call
+import com.inar.kickercompose.data.models.userdetails.UserDetails
 import retrofit2.http.GET
 import retrofit2.http.Path
 
