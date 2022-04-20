@@ -20,4 +20,28 @@ class UserDetails {
             statsOneVsOne.winsCount + statsTwoVsTwo.winsCountInAttack + statsTwoVsTwo.winsCountInDefense
     }
 
+    val statsOneVsOneList by lazy {
+        statsOneVsOne.let {
+            listOf(
+                "Battles count 1x1" to it.battlesCount.toString(),
+                "Percent of wins" to if (it.battlesCount > 10)
+                    it.winsCount.toDouble().div(it.battlesCount).toInt().toString() + "%"
+                else "not enough battles",
+                "ELO" to it.elo.toString(),
+                "Wins count" to it.winsCount.toString(),
+                "Defeats count" to it.battlesCount.minus(it.winsCount).toString(),
+                "Count of goals" to ""
+            )
+        }
+    }
+
+    val statsTwoVsTwoList: List<Pair<String, String>> by lazy {
+        statsTwoVsTwo.let {
+            listOf("Battles count 2x2" to it.battlesCountInAttack.plus(it.battlesCountInDefense)
+                .toString(),
+                "Elo" to it.elo.toString())
+        }
+    }
+
+
 }

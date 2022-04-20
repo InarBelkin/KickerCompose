@@ -16,7 +16,7 @@ sealed class LoadedState<T>(val value: T) {
     companion object {
         inline fun <T> loadJuggler(
             ld: MutableLiveData<LoadedState<T>>,
-            loadingFun: () -> LoadedState<T>
+            loadingFun: () -> LoadedState<T>,
         ) {
             ld.value = Loading(ld.value!!.value)
             when (val v = loadingFun.invoke()) {
