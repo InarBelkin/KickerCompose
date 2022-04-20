@@ -9,19 +9,16 @@ import androidx.compose.ui.Modifier
 import com.inar.kickercompose.data.models.LeaderboardWrapper
 
 @Composable
-fun <T> BottomLoadOverlay(loadedContent: LoadedState<T>) {
-    when (loadedContent) {
-        is LoadedState.Loading -> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-                Text(text = "loading...")
-            }
+fun <T> BottomLoadOverlay(loadedContent: LoadedState<T>) = when (loadedContent) {
+    is LoadedState.Loading -> {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+            Text(text = "loading...")
         }
-        is LoadedState.Error -> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-                Text(text = "Error: ${loadedContent.error.message}")
-            }
-        }
-        else -> {}
     }
-
+    is LoadedState.Error -> {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+            Text(text = "Error: ${loadedContent.error.message}")
+        }
+    }
+    else -> {}
 }
