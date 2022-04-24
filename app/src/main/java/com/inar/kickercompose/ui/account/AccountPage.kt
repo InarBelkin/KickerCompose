@@ -1,6 +1,5 @@
 package com.inar.kickercompose.ui.account
 
-import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,8 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import com.inar.kickercompose.data.models.account.LoginDto
 import com.inar.kickercompose.data.models.states.KeyboardState
 import com.inar.kickercompose.data.models.states.keyboardAsState
-import com.inar.kickercompose.ui.AccountItems
-import kotlinx.coroutines.CoroutineScope
+import com.inar.kickercompose.ui.navigation.AccountItems
 import kotlinx.coroutines.launch
 
 

@@ -12,6 +12,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.inar.kickercompose.data.models.states.auth.AuthState
@@ -44,7 +45,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(name: String) {
     val context = LocalContext.current
-    val accountVm: AccountViewModel = viewModel()
+    val accountVm: AccountViewModel = hiltViewModel()
     val authState by accountVm.authState.observeAsState()
 
     LaunchedEffect(Unit) {

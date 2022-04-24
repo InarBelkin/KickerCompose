@@ -7,14 +7,17 @@ import com.inar.kickercompose.data.models.userdetails.UserDetails
 import com.inar.kickercompose.data.net.NetworkService
 import java.lang.Exception
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class StatsRepository @Inject constructor() : IStatsRepository {
+@Singleton
+class StatsRepository @Inject constructor(
+    private val networkService: NetworkService,
+) : IStatsRepository {
     override suspend fun getUserDetails(id: String): LoadedState<UserDetails> =
-        loadWrapper { NetworkService.stats.getUserDetails(id) }
+        loadWrapper { networkService.stats.getUserDetails(id) }
 
     override suspend fun getLeaderboard(): LoadedState<LeaderboardWrapper> =
-        loadWrapper { NetworkService.stats.getLeaderboard() }
-
+        loadWrapper { networkService.stats.getLeaderboard() }
 }
 
 inline fun <reified T> loadWrapper(loader: () -> T): LoadedState<T> {

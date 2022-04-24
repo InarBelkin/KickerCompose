@@ -17,7 +17,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.inar.kickercompose.other.strangeNavigate
 import com.inar.kickercompose.ui.Lobby
-import com.inar.kickercompose.ui.NavigationItems
 import com.inar.kickercompose.ui.TestViewModel
 import com.inar.kickercompose.ui.leaderboard.Leaderboard
 import com.inar.kickercompose.ui.mypage.MyPage

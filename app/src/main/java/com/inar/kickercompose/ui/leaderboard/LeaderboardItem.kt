@@ -21,7 +21,7 @@ import androidx.navigation.NavHostController
 import com.inar.kickercompose.R
 import com.inar.kickercompose.data.models.UserLeaderboard
 import com.inar.kickercompose.other.strangeNavigate
-import com.inar.kickercompose.ui.NavigationItems
+import com.inar.kickercompose.ui.navigation.NavigationItems
 
 @Composable
 @Preview

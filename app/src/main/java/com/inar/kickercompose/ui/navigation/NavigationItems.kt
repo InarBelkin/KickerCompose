@@ -1,4 +1,4 @@
-package com.inar.kickercompose.ui
+package com.inar.kickercompose.ui.navigation
 
 import com.inar.kickercompose.R
 
