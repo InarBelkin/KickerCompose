@@ -10,8 +10,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.inar.kickercompose.other.loadstates.BottomLoadOverlay
-import com.inar.kickercompose.other.loadstates.LoadedState
+import com.inar.kickercompose.data.models.states.loadstates.BottomLoadOverlay
 import com.inar.kickercompose.ui.TestViewModel
 
 @Composable

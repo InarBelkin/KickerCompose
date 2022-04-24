@@ -1,8 +1,5 @@
 package com.inar.kickercompose.ui
 
-import androidx.navigation.NamedNavArgument
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
 import com.inar.kickercompose.R
 
 sealed class NavigationItems(
@@ -28,4 +25,11 @@ sealed class NavigationItems(
         const val userId = "userId"
         const val clearRoute = "user_page/"
     }
+}
+
+sealed class AccountItems(
+    val route: String
+){
+    object Login: AccountItems("login")
+    object Registration: AccountItems("registration")
 }

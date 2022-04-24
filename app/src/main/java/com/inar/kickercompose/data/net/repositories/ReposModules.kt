@@ -11,4 +11,6 @@ abstract class StatsReposModule {
     @Binds
     abstract fun bindStatsRepository(statsRepository: StatsRepository): IStatsRepository
 
+    @Binds
+    abstract fun bindAccountRepository(accountRepository: AccountRepository): IAccountRepository
 }

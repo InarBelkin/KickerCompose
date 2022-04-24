@@ -1,4 +1,4 @@
-package com.inar.kickercompose.other.loadstates
+package com.inar.kickercompose.data.models.states.loadstates
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

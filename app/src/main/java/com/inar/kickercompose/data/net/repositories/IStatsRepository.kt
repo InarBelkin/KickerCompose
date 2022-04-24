@@ -1,7 +1,7 @@
 package com.inar.kickercompose.data.net.repositories
 
 import com.inar.kickercompose.data.models.LeaderboardWrapper
-import com.inar.kickercompose.other.loadstates.LoadedState
+import com.inar.kickercompose.data.models.states.loadstates.LoadedState
 import com.inar.kickercompose.data.models.userdetails.UserDetails
 
 interface IStatsRepository {

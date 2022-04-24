@@ -2,12 +2,11 @@ package com.inar.kickercompose.data.net.repositories
 
 import android.util.Log
 import com.inar.kickercompose.data.models.LeaderboardWrapper
-import com.inar.kickercompose.other.loadstates.LoadedState
+import com.inar.kickercompose.data.models.states.loadstates.LoadedState
 import com.inar.kickercompose.data.models.userdetails.UserDetails
 import com.inar.kickercompose.data.net.NetworkService
 import java.lang.Exception
 import javax.inject.Inject
-import kotlin.reflect.KClass
 
 class StatsRepository @Inject constructor() : IStatsRepository {
     override suspend fun getUserDetails(id: String): LoadedState<UserDetails> =

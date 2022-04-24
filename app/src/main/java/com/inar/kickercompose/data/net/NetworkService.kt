@@ -15,5 +15,6 @@ object NetworkService {
     }
 
     val stats: StatsApi = mRetrofit.create(StatsApi::class.java);
+    val account: AccountApi = mRetrofit.create(AccountApi::class.java)
 
 }

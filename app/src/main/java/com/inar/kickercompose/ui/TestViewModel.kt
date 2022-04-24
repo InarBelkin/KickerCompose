@@ -3,7 +3,7 @@ package com.inar.kickercompose.ui
 import android.util.Log
 import androidx.lifecycle.*
 import com.inar.kickercompose.data.models.LeaderboardWrapper
-import com.inar.kickercompose.other.loadstates.LoadedState
+import com.inar.kickercompose.data.models.states.loadstates.LoadedState
 import com.inar.kickercompose.data.models.userdetails.UserDetails
 import com.inar.kickercompose.data.net.repositories.IStatsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
