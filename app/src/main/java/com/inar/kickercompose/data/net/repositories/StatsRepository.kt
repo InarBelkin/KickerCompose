@@ -18,6 +18,10 @@ class StatsRepository @Inject constructor(
 
     override suspend fun getLeaderboard(): LoadedState<LeaderboardWrapper> =
         loadWrapper { networkService.stats.getLeaderboard() }
+
+    suspend fun getMe(): LoadedState<UserDetails> = loadWrapper {
+        return loadWrapper { networkService.stats.getMe() }
+    }
 }
 
 inline fun <reified T> loadWrapper(loader: () -> T): LoadedState<T> {

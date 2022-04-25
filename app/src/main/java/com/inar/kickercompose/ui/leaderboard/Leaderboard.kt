@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.inar.kickercompose.data.models.states.loadstates.BottomLoadOverlay
 import com.inar.kickercompose.ui.TestViewModel
@@ -20,9 +21,11 @@ fun Leaderboard(vm: TestViewModel, navController: NavHostController) {
         vm.loadLeaderboard();
     }
 
-    LazyColumn(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxSize()) {
-        itemsIndexed(users!!.value.data) { _, item ->
-            LeaderboardItem(user = item, navController = navController)
+    Box(modifier = Modifier.padding(7.dp)) {
+        LazyColumn(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxSize()) {
+            itemsIndexed(users!!.value.data) { _, item ->
+                LeaderboardItem(user = item, navController = navController)
+            }
         }
     }
 

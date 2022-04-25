@@ -16,6 +16,8 @@ import com.inar.kickercompose.data.models.account.LoginAnswerDto
 import com.inar.kickercompose.data.models.account.LoginDto
 import com.inar.kickercompose.data.models.account.RefreshDto
 import com.inar.kickercompose.data.models.account.RegisterDto
+import com.inar.kickercompose.data.models.states.MessageState
+import com.inar.kickercompose.data.models.states.MessageStyle
 import com.inar.kickercompose.data.net.NetworkService
 import com.inar.kickercompose.data.net.repositories.AccountRepository
 import com.inar.kickercompose.data.net.repositories.IAccountRepository
@@ -60,7 +62,7 @@ class AccountViewModel @Inject constructor(
     }
 
 
-    public val authState: LiveData<AuthState>
+    val authState: LiveData<AuthState>
         get() = _authState
 
     private val _authState = MutableLiveData<AuthState>(AuthState.Loading(""))
@@ -93,21 +95,23 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    suspend fun login(context: Context, loginDto: LoginDto): String {
+    suspend fun login(context: Context, loginDto: LoginDto): MessageState {
         try {
             val answerDto = account.loginMail(loginDto)
 
-            if (answerDto.success) {
+            return if (answerDto.success) {
                 setTokens(context,
                     refreshToken = answerDto.refreshToken,
                     accessToken = answerDto.accessToken)
                 _authState.value = AuthState.Logged("")
+                MessageState(answerDto.message, MessageStyle.Success)
             } else {
                 setTokens(context, "", "")
+                MessageState(answerDto.message, MessageStyle.NotCorrect)
             }
-            return answerDto.message
+
         } catch (e: Exception) {
-            return e.message ?: "unknown error with connection"
+            return MessageState(e.localizedMessage ?: "error", MessageStyle.Error)
         }
     }
 
@@ -115,13 +119,14 @@ class AccountViewModel @Inject constructor(
         TODO()
     }
 
-    suspend fun register(context: Context, registerDto: RegisterDto): String {
+    suspend fun register(context: Context, registerDto: RegisterDto): MessageState {
         try {
             val dto = account.mailRegistration(registerDto)
-            return dto.message
+            return MessageState(dto.message,
+                if (dto.success) MessageStyle.Success else MessageStyle.NotCorrect)
         } catch (e: Exception) {
             Log.e(tag, e.localizedMessage ?: "")
-            return e.localizedMessage ?: "unknown error"
+            return MessageState(e.localizedMessage ?: "error", MessageStyle.Error)
         }
     }
 

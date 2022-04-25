@@ -6,6 +6,7 @@ class UserDetails {
     var id: String = ""
     var name: String = "";
     var imgSource: String = ""
+    var isMe = false
 
     var statsOneVsOne = StatsOneVsOne()
     var statsTwoVsTwo = StatsTwoVsTwo()

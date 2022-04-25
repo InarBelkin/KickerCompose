@@ -12,5 +12,7 @@ interface StatsApi {
     @GET("api/stats/userDetails/{id}")
     suspend fun getUserDetails(@Path(value = "id") userId: String): UserDetails
 
+    @GET("api/stats/me")
+    suspend fun getMe(): UserDetails
 
 }

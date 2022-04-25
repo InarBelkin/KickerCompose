@@ -39,7 +39,7 @@ fun LeaderboardItem(user: UserLeaderboard, navController: NavHostController? = n
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(5.dp)
+            .padding(7.dp)
             .height(cardHeight)
             .clickable {
                 navController?.strangeNavigate(NavigationItems.UserPage.clearRoute + user.id)
