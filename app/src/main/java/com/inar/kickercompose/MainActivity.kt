@@ -13,10 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.inar.kickercompose.data.models.states.auth.AuthState
-import com.inar.kickercompose.ui.account.AccountViewModel
+import com.inar.kickercompose.data.viemodels.TestViewModel
 import com.inar.kickercompose.ui.account.AccountPage
 import com.inar.kickercompose.ui.navigation.BottomNavBar
 import com.inar.kickercompose.ui.navigation.Navigation
@@ -45,27 +44,27 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(name: String) {
     val context = LocalContext.current
-    val accountVm: AccountViewModel = hiltViewModel()
-    val authState by accountVm.authState.observeAsState()
+    val vm: TestViewModel = hiltViewModel();
+    val authState by vm.account.authState.observeAsState()
 
     LaunchedEffect(Unit) {
-        accountVm.loginRefresh(context)
+        vm.account.loginRefresh()
     }
 
     when (authState) {
-        is AuthState.Loading, is AuthState.Logged -> StandartApp()
+        is AuthState.Loading, is AuthState.Logged -> StandardApp(vm)
         is AuthState.Error -> Text(text = "Login error")    //TODO:change connection error page and add button "try again"
-        is AuthState.NotLogged -> AccountPage(accountVm)
+        is AuthState.NotLogged -> AccountPage(vm)
     }
 
 }
 
 @Composable
-fun StandartApp() {
+fun StandardApp(vm:TestViewModel) {
     val navController = rememberNavController()
     Scaffold(bottomBar = { BottomNavBar(navController) }) {
         Box(modifier = Modifier.padding(it)) {
-            Navigation(navHostController = navController)
+            Navigation(navHostController = navController, vm)
         }
     }
 }

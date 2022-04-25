@@ -15,8 +15,8 @@ abstract class StatsReposModule {
     @Binds
     abstract fun bindStatsRepository(statsRepository: StatsRepository): IStatsRepository
 
-    @Binds
-    abstract fun bindAccountRepository(accountRepository: AccountRepository): IAccountRepository
+//    @Binds
+//    abstract fun bindAccountRepository(accountRepository: AccountRepository): IAccountRepository
 }
 
 @Module
@@ -26,4 +26,8 @@ object NetworkModule {
     @Singleton
     @Provides
     fun createNetwork() = NetworkService()
+
+    @Singleton
+    @Provides
+    fun createAccountRepos(networkService: NetworkService):IAccountRepository = AccountRepository(networkService)
 }

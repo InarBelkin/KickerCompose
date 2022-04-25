@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.inar.kickercompose.data.models.states.loadstates.BottomLoadOverlay
-import com.inar.kickercompose.ui.TestViewModel
+import com.inar.kickercompose.data.viemodels.TestViewModel
 
 @Composable
 fun Leaderboard(vm: TestViewModel, navController: NavHostController) {

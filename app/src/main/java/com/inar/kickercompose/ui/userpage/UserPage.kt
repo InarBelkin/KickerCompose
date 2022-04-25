@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.inar.kickercompose.data.models.states.loadstates.BottomLoadOverlay
 import com.inar.kickercompose.data.models.userdetails.UserDetails
-import com.inar.kickercompose.ui.TestViewModel
+import com.inar.kickercompose.data.viemodels.TestViewModel
 import com.inar.kickercompose.ui.leaderboard.LeaderboardItem
 
 @Composable
@@ -30,20 +30,30 @@ fun UserPage(vm: TestViewModel, userId: String) {
         vm.loadUserDetails(userId)
     }
 
-    Box(modifier = Modifier.padding(7.dp)) {
-        Column(modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .padding(7.dp)) {
+        if (user!!.value.isMe) {
+            Column(modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally) {
+                LeaderboardItem(user = user!!.value.toUserLeaderboard())
+                StatsCardSelector(user = user!!.value)
+                Text(text = user!!.value.isMe.toString())
 
-            LeaderboardItem(user = user!!.value.toUserLeaderboard())
-
-            StrokePseudoButton(text = "Challenge to a duel!") {
+            }
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+                StrokePseudoButton(text = "Settings") { }
             }
 
-            StatsCardSelector(user = user!!.value)
-
-            Text(text = userId)
+        } else {
+            Column(modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally) {
+                LeaderboardItem(user = user!!.value.toUserLeaderboard())
+                StrokePseudoButton(text = "Challenge to a duel!") { }
+                StatsCardSelector(user = user!!.value)
+                Text(text = user!!.value.isMe.toString())
+            }
         }
-
     }
 
     BottomLoadOverlay(user!!)

@@ -11,12 +11,10 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.inar.kickercompose.data.models.account.LoginDto
@@ -24,11 +22,12 @@ import com.inar.kickercompose.data.models.states.KeyboardState
 import com.inar.kickercompose.data.models.states.MessageState
 import com.inar.kickercompose.data.models.states.MessageStyle
 import com.inar.kickercompose.data.models.states.keyboardAsState
+import com.inar.kickercompose.data.viemodels.TestViewModel
 import com.inar.kickercompose.ui.navigation.AccountItems
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginPage(accountVM: AccountViewModel, navController: NavController) {
+fun LoginPage(vm: TestViewModel, navController: NavController) {
 
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
@@ -67,7 +66,7 @@ fun LoginPage(accountVM: AccountViewModel, navController: NavController) {
                 .fillMaxWidth()
                 .height(60.dp), onClick = {
                 scope.launch {
-                    message = accountVM.login(context, LoginDto().apply {
+                    message = vm.account.login(LoginDto().apply {
                         this.email = email
                         this.password = password
                     })

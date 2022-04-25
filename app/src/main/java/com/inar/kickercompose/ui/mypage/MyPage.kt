@@ -1,11 +1,8 @@
 package com.inar.kickercompose.ui.mypage
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Button
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import com.inar.kickercompose.ui.TestViewModel
+import com.inar.kickercompose.data.viemodels.TestViewModel
 
 @Composable
 fun MyPage(model: TestViewModel) {

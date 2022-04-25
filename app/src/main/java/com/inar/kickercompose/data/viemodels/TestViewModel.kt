@@ -1,4 +1,4 @@
-package com.inar.kickercompose.ui
+package com.inar.kickercompose.data.viemodels
 
 import android.util.Log
 import androidx.lifecycle.*
@@ -11,7 +11,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TestViewModel @Inject constructor(
-    private val repository: IStatsRepository
+    private val repository: IStatsRepository,
+    val account: AccountHandler,
 ) : ViewModel() {
 
     init {

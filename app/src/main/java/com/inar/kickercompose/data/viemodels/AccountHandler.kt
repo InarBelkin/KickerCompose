@@ -1,4 +1,4 @@
-package com.inar.kickercompose.ui.account
+package com.inar.kickercompose.data.viemodels
 
 import android.content.Context
 import android.util.Log
@@ -12,23 +12,22 @@ import com.inar.kickercompose.data.models.states.auth.AuthState
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.inar.kickercompose.data.models.account.LoginAnswerDto
 import com.inar.kickercompose.data.models.account.LoginDto
 import com.inar.kickercompose.data.models.account.RefreshDto
 import com.inar.kickercompose.data.models.account.RegisterDto
 import com.inar.kickercompose.data.models.states.MessageState
 import com.inar.kickercompose.data.models.states.MessageStyle
-import com.inar.kickercompose.data.net.NetworkService
-import com.inar.kickercompose.data.net.repositories.AccountRepository
 import com.inar.kickercompose.data.net.repositories.IAccountRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import java.lang.Exception
 import javax.inject.Inject
+import javax.inject.Singleton
 
-@HiltViewModel
-class AccountViewModel @Inject constructor(
+@Singleton
+class AccountHandler @Inject constructor(
     private val account: IAccountRepository,
+    @ApplicationContext private val appContext:  Context
 ) : ViewModel() {
 
     companion object {
@@ -38,27 +37,27 @@ class AccountViewModel @Inject constructor(
         const val tag = "account_vm"
     }
 
-    suspend fun getRefreshToken(context: Context): String? =
-        context.dataStore.data.first()[REFRESH_TOKEN_KEY]
+    suspend fun getRefreshToken(): String? =
+        appContext.dataStore.data.first()[REFRESH_TOKEN_KEY]
 
-    suspend fun setRefreshToken(context: Context, value: String) {
-        context.dataStore.edit {
+    suspend fun setRefreshToken(value: String) {
+        appContext.dataStore.edit {
             it[REFRESH_TOKEN_KEY] = value
         }
     }
 
-    suspend fun getAccessToken(context: Context): String? =
-        context.dataStore.data.first()[ACCESS_TOKEN_KEY]
+    suspend fun getAccessToken(): String? =
+        appContext.dataStore.data.first()[ACCESS_TOKEN_KEY]
 
-    suspend fun setAccessToken(context: Context, value: String) {
-        context.dataStore.edit {
+    suspend fun setAccessToken( value: String) {
+        appContext.dataStore.edit {
             it[ACCESS_TOKEN_KEY] = value
         }
     }
 
-    private suspend fun setTokens(context: Context, refreshToken: String, accessToken: String) {
-        setRefreshToken(context, refreshToken)
-        setAccessToken(context, accessToken)
+    private suspend fun setTokens(refreshToken: String, accessToken: String) {
+        setRefreshToken( refreshToken)
+        setAccessToken(accessToken)
     }
 
 
@@ -67,8 +66,8 @@ class AccountViewModel @Inject constructor(
 
     private val _authState = MutableLiveData<AuthState>(AuthState.Loading(""))
 
-    suspend fun loginRefresh(context: Context) {
-        val token = getRefreshToken(context)
+    suspend fun loginRefresh() {
+        val token = getRefreshToken()
         if (token == "" || token == null) {
             _authState.value = AuthState.NotLogged("")
             return
@@ -80,12 +79,11 @@ class AccountViewModel @Inject constructor(
                 account.refresh(RefreshDto().apply { refreshToken = token })
 
             if (loginDto.success) {
-                setTokens(context,
-                    refreshToken = loginDto.refreshToken,
+                setTokens(refreshToken = loginDto.refreshToken,
                     accessToken = loginDto.accessToken)
                 _authState.value = AuthState.Logged("")
             } else {
-                setTokens(context, "", "")
+                setTokens("", "")
                 _authState.value = AuthState.NotLogged("");
             }
 
@@ -95,18 +93,17 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    suspend fun login(context: Context, loginDto: LoginDto): MessageState {
+    suspend fun login(loginDto: LoginDto): MessageState {
         try {
             val answerDto = account.loginMail(loginDto)
 
             return if (answerDto.success) {
-                setTokens(context,
-                    refreshToken = answerDto.refreshToken,
+                setTokens(refreshToken = answerDto.refreshToken,
                     accessToken = answerDto.accessToken)
                 _authState.value = AuthState.Logged("")
                 MessageState(answerDto.message, MessageStyle.Success)
             } else {
-                setTokens(context, "", "")
+                setTokens("", "")
                 MessageState(answerDto.message, MessageStyle.NotCorrect)
             }
 
@@ -119,7 +116,7 @@ class AccountViewModel @Inject constructor(
         TODO()
     }
 
-    suspend fun register(context: Context, registerDto: RegisterDto): MessageState {
+    suspend fun register(registerDto: RegisterDto): MessageState {
         try {
             val dto = account.mailRegistration(registerDto)
             return MessageState(dto.message,

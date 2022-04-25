@@ -12,17 +12,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.inar.kickercompose.data.models.account.LoginDto
 import com.inar.kickercompose.data.models.account.RegisterDto
 import com.inar.kickercompose.data.models.states.KeyboardState
 import com.inar.kickercompose.data.models.states.MessageState
 import com.inar.kickercompose.data.models.states.MessageStyle
 import com.inar.kickercompose.data.models.states.keyboardAsState
+import com.inar.kickercompose.data.viemodels.TestViewModel
 import com.inar.kickercompose.ui.navigation.AccountItems
 import kotlinx.coroutines.launch
 
 @Composable
-fun RegistrationPage(accountVM: AccountViewModel, navController: NavController) {
+fun RegistrationPage(vm: TestViewModel, navController: NavController) {
     var email by rememberSaveable { mutableStateOf("") }
     var login by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
@@ -65,7 +65,7 @@ fun RegistrationPage(accountVM: AccountViewModel, navController: NavController) 
                 .fillMaxWidth()
                 .height(60.dp), onClick = {
                 scope.launch {
-                    message = accountVM.register(context, RegisterDto().apply {
+                    message = vm.account.register(RegisterDto().apply {
                         this.name = login
                         this.email = email
                         this.password = password
