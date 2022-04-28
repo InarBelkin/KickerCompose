@@ -1,6 +1,6 @@
 package com.inar.kickercompose.data.net.repositories
 
-import com.inar.kickercompose.data.net.NetworkService
+import com.inar.kickercompose.data.net.network.NetworkService
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -15,9 +15,18 @@ abstract class StatsReposModule {
     @Binds
     abstract fun bindStatsRepository(statsRepository: StatsRepository): IStatsRepository
 
+
 //    @Binds
 //    abstract fun bindAccountRepository(accountRepository: AccountRepository): IAccountRepository
 }
+
+//@Module
+//@InstallIn(SingletonComponent::class)
+//abstract class SingleModule{
+//    @Binds
+//    @Singleton
+//    abstract fun bindLobbyRepository(lobbyRepository: LobbyRepository): ILobbyRepository
+//}
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -29,5 +38,11 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun createAccountRepos(networkService: NetworkService):IAccountRepository = AccountRepository(networkService)
+    fun createAccountRepos(networkService: NetworkService): IAccountRepository =
+        AccountRepository(networkService)
+
+    @Singleton
+    @Provides
+    fun createLobbyRepos(networkService: NetworkService): ILobbyRepository = LobbyRepository(networkService);
+
 }

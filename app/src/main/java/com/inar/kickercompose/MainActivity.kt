@@ -1,6 +1,7 @@
 package com.inar.kickercompose
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -44,11 +45,15 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(name: String) {
     val context = LocalContext.current
+
     val vm: TestViewModel = hiltViewModel();
     val authState by vm.account.authState.observeAsState()
 
     LaunchedEffect(Unit) {
         vm.account.loginRefresh()
+        vm.hub.start(vm.account.getAccessToken() ?: "") { i, j ->
+            Toast.makeText(context, "hello", Toast.LENGTH_LONG).show()
+        }
     }
 
     when (authState) {
@@ -60,7 +65,7 @@ fun MainScreen(name: String) {
 }
 
 @Composable
-fun StandardApp(vm:TestViewModel) {
+fun StandardApp(vm: TestViewModel) {
     val navController = rememberNavController()
     Scaffold(bottomBar = { BottomNavBar(navController) }) {
         Box(modifier = Modifier.padding(it)) {

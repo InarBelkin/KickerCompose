@@ -1,7 +1,7 @@
-package com.inar.kickercompose.data.net
+package com.inar.kickercompose.data.net.network
 
-import androidx.compose.ui.platform.InspectableModifier
 import com.inar.kickercompose.data.models.account.*
+import com.inar.kickercompose.data.net.Endpoints
 import retrofit2.http.Body
 import retrofit2.http.POST
 

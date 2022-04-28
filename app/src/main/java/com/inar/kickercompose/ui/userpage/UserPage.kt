@@ -1,5 +1,6 @@
 package com.inar.kickercompose.ui.userpage
 
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,23 +9,27 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.inar.kickercompose.data.models.lobby.InviteRequestDto
 import com.inar.kickercompose.data.models.states.loadstates.BottomLoadOverlay
 import com.inar.kickercompose.data.models.userdetails.UserDetails
 import com.inar.kickercompose.data.viemodels.TestViewModel
 import com.inar.kickercompose.ui.leaderboard.LeaderboardItem
+import kotlinx.coroutines.launch
 
 @Composable
 fun UserPage(vm: TestViewModel, userId: String) {
 
     val user by vm.userDetailsLiveData.observeAsState()
-
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(userId) {
         vm.loadUserDetails(userId)
@@ -49,7 +54,15 @@ fun UserPage(vm: TestViewModel, userId: String) {
             Column(modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 LeaderboardItem(user = user!!.value.toUserLeaderboard())
-                StrokePseudoButton(text = "Challenge to a duel!") { }
+                StrokePseudoButton(text = "Challenge to a duel!") {
+                    scope.launch {
+                        vm.hub.inviteOne(InviteRequestDto().apply {
+                            invitedId = user!!.value.id
+                            message = "mil zhopu"
+                        });
+
+                    }
+                }
                 StatsCardSelector(user = user!!.value)
                 Text(text = user!!.value.isMe.toString())
             }

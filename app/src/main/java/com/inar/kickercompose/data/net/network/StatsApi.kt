@@ -1,7 +1,8 @@
-package com.inar.kickercompose.data.net
+package com.inar.kickercompose.data.net.network
 
 import com.inar.kickercompose.data.models.LeaderboardWrapper
 import com.inar.kickercompose.data.models.userdetails.UserDetails
+import com.inar.kickercompose.data.net.Endpoints
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path

@@ -4,9 +4,8 @@ import android.util.Log
 import com.inar.kickercompose.data.models.LeaderboardWrapper
 import com.inar.kickercompose.data.models.states.loadstates.LoadedState
 import com.inar.kickercompose.data.models.userdetails.UserDetails
-import com.inar.kickercompose.data.net.NetworkService
+import com.inar.kickercompose.data.net.network.NetworkService
 import com.inar.kickercompose.data.viemodels.AccountHandler
-import dagger.hilt.android.qualifiers.ApplicationContext
 import java.lang.Exception
 import javax.inject.Inject
 import javax.inject.Singleton

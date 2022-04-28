@@ -1,7 +1,7 @@
 package com.inar.kickercompose.data.net.repositories
 
 import com.inar.kickercompose.data.models.account.*
-import com.inar.kickercompose.data.net.NetworkService
+import com.inar.kickercompose.data.net.network.NetworkService
 import javax.inject.Inject
 import javax.inject.Singleton
 
