@@ -23,7 +23,7 @@ class HubService @Inject constructor(
 ) {
     lateinit var hub: HubConnection
 
-    fun start(accessToken: String, callback: (String, String) -> Unit) {
+    fun start(callback: (String, String) -> Unit) { //TODO: try to change callback to events(or how does it called here?)
         val url = appContext.getString(R.string.baseUrl) + "invitation"
 
         hub = HubConnectionBuilder.create(url)
@@ -38,7 +38,7 @@ class HubService @Inject constructor(
         }, String::class.java, String::class.java)
 
         hub.start().subscribe() {
-           // hub.invoke("Send", "hello Android")
+            // hub.invoke("Send", "hello Android")
         }
 
     }
@@ -46,8 +46,6 @@ class HubService @Inject constructor(
     suspend fun inviteOne(dto: InviteRequestDto) {
         lobby.InviteOne(dto);
     }
-
-
 
 
 }

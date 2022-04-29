@@ -11,7 +11,7 @@ class LobbyRepository @Inject constructor(
     private val networkService: NetworkService,
 ) : ILobbyRepository {
 
-    override suspend fun InviteOne(dto: InviteRequestDto) {
+    override suspend fun InviteOne(dto: InviteRequestDto) { //TODO: where is try catch?
         networkService.lobby.inviteOne(dto)
     }
 }

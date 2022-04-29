@@ -39,7 +39,6 @@ fun LoginPage(vm: TestViewModel, navController: NavController) {
     val mainAlignment =
         if (isKeyboardOpen == KeyboardState.Opened) Alignment.TopCenter else Alignment.Center
 
-    val context = LocalContext.current
 
     Box(modifier = Modifier.fillMaxSize(),
         contentAlignment = mainAlignment) {

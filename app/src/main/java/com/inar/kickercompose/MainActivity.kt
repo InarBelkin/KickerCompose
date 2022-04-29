@@ -1,5 +1,8 @@
 package com.inar.kickercompose
 
+import android.app.NotificationManager
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -17,6 +20,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.inar.kickercompose.data.models.states.auth.AuthState
 import com.inar.kickercompose.data.viemodels.TestViewModel
+import com.inar.kickercompose.services.ServiceUtil
+import com.inar.kickercompose.services.SignalService
 import com.inar.kickercompose.ui.account.AccountPage
 import com.inar.kickercompose.ui.navigation.BottomNavBar
 import com.inar.kickercompose.ui.navigation.Navigation
@@ -44,16 +49,21 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen(name: String) {
+
     val context = LocalContext.current
 
     val vm: TestViewModel = hiltViewModel();
     val authState by vm.account.authState.observeAsState()
 
     LaunchedEffect(Unit) {
+        ServiceUtil.createNotificationChannel(context)
         vm.account.loginRefresh()
-        vm.hub.start(vm.account.getAccessToken() ?: "") { i, j ->
-            Toast.makeText(context, "hello", Toast.LENGTH_LONG).show()
-        }
+
+        val intent: Intent = Intent(context, SignalService::class.java)
+        context.startService(intent);
+//        vm.hub.start() { i, j ->
+//            Toast.makeText(context, "hello", Toast.LENGTH_LONG).show()
+//        }
     }
 
     when (authState) {

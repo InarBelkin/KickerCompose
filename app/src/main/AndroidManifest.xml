@@ -13,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KickerCompose"
         android:usesCleartextTraffic="true">
+        <service android:name=".services.SignalService" android:process=":catprocess" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
