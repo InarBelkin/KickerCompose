@@ -1,10 +1,9 @@
 package com.inar.kickercompose
 
-import android.app.NotificationManager
+import android.content.ComponentName
 import android.content.Intent
-import android.os.Build
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -20,6 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.inar.kickercompose.data.models.states.auth.AuthState
 import com.inar.kickercompose.data.viemodels.TestViewModel
+import com.inar.kickercompose.services.Restarter
 import com.inar.kickercompose.services.ServiceUtil
 import com.inar.kickercompose.services.SignalService
 import com.inar.kickercompose.ui.account.AccountPage
@@ -27,6 +27,7 @@ import com.inar.kickercompose.ui.navigation.BottomNavBar
 import com.inar.kickercompose.ui.navigation.Navigation
 import com.inar.kickercompose.ui.theme.KickerComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -44,6 +45,19 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    override fun onDestroy() {
+//        Intent(this, SignalService::class.java).also {
+//            stopService(it)
+//        }
+
+//        Intent().also {
+//            it.action = ServiceUtil.RESTART_ACTION
+//            it.setClass(this, Restarter::class.java)
+//            this.sendBroadcast(it)
+//        }
+        super.onDestroy()
+    }
 }
 
 
@@ -56,11 +70,11 @@ fun MainScreen(name: String) {
     val authState by vm.account.authState.observeAsState()
 
     LaunchedEffect(Unit) {
-        ServiceUtil.createNotificationChannel(context)
         vm.account.loginRefresh()
 
-        val intent: Intent = Intent(context, SignalService::class.java)
-        context.startService(intent);
+        val intent = Intent(context, SignalService::class.java)
+        context.applicationContext.startService(intent);
+
 //        vm.hub.start() { i, j ->
 //            Toast.makeText(context, "hello", Toast.LENGTH_LONG).show()
 //        }

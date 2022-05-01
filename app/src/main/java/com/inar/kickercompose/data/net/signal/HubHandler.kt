@@ -16,7 +16,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class HubService @Inject constructor(
+class HubHandler @Inject constructor(
     private val account: AccountHandler,
     @ApplicationContext private val appContext: Context,
     private val lobby: ILobbyRepository,
@@ -37,10 +37,7 @@ class HubService @Inject constructor(
             callback(i, j)
         }, String::class.java, String::class.java)
 
-        hub.start().subscribe() {
-            // hub.invoke("Send", "hello Android")
-        }
-
+        hub.start()
     }
 
     suspend fun inviteOne(dto: InviteRequestDto) {

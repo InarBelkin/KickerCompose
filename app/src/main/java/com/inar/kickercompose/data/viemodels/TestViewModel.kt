@@ -6,7 +6,7 @@ import com.inar.kickercompose.data.models.LeaderboardWrapper
 import com.inar.kickercompose.data.models.states.loadstates.LoadedState
 import com.inar.kickercompose.data.models.userdetails.UserDetails
 import com.inar.kickercompose.data.net.repositories.IStatsRepository
-import com.inar.kickercompose.data.net.signal.HubService
+import com.inar.kickercompose.data.net.signal.HubHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -14,7 +14,7 @@ import javax.inject.Inject
 class TestViewModel @Inject constructor(
     private val repository: IStatsRepository,
     val account: AccountHandler,
-    val hub: HubService,
+    val hub: HubHandler,
 ) : ViewModel() {
 
     init {
