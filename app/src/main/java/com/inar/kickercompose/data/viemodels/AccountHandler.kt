@@ -12,9 +12,8 @@ import com.inar.kickercompose.data.models.states.auth.AuthState
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.inar.kickercompose.data.models.account.LoginDto
-import com.inar.kickercompose.data.models.account.RefreshDto
-import com.inar.kickercompose.data.models.account.RegisterDto
+import com.auth0.android.jwt.JWT
+import com.inar.kickercompose.data.models.account.*
 import com.inar.kickercompose.data.models.states.MessageState
 import com.inar.kickercompose.data.models.states.MessageStyle
 import com.inar.kickercompose.data.net.repositories.IAccountRepository
@@ -27,7 +26,7 @@ import javax.inject.Singleton
 @Singleton
 class AccountHandler @Inject constructor(
     private val account: IAccountRepository,
-    @ApplicationContext private val appContext:  Context
+    @ApplicationContext private val appContext: Context,
 ) : ViewModel() {
 
     companion object {
@@ -49,14 +48,14 @@ class AccountHandler @Inject constructor(
     suspend fun getAccessToken(): String? =
         appContext.dataStore.data.first()[ACCESS_TOKEN_KEY]
 
-    suspend fun setAccessToken( value: String) {
+    suspend fun setAccessToken(value: String) {
         appContext.dataStore.edit {
             it[ACCESS_TOKEN_KEY] = value
         }
     }
 
     private suspend fun setTokens(refreshToken: String, accessToken: String) {
-        setRefreshToken( refreshToken)
+        setRefreshToken(refreshToken)
         setAccessToken(accessToken)
     }
 
@@ -113,7 +112,8 @@ class AccountHandler @Inject constructor(
     }
 
     suspend fun logOut() {
-        TODO()
+        account.logOut(getAccessToken() ?: "i ", LogoutDto(getRefreshToken() ?: ""))
+        setTokens("", "");
     }
 
     suspend fun register(registerDto: RegisterDto): MessageState {
@@ -127,5 +127,18 @@ class AccountHandler @Inject constructor(
         }
     }
 
-
+    suspend fun getUserClaims(): MeByClaims? {
+        val token = getAccessToken()
+        if (token == null || token == "")
+            return null
+        val jwt = JWT(token);
+        val id =
+            jwt.getClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid").asString()!!
+        val name =
+            jwt.getClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").asString()!!
+        return MeByClaims().also {
+            it.id = id
+            it.name = name
+        }
+    }
 }

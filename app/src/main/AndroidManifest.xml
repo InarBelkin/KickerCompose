@@ -18,7 +18,6 @@
         <service
             android:name=".services.SignalService"
             android:enabled="true"
-            android:process=":catproc"
             />
         <receiver
             android:name=".services.Restarter"

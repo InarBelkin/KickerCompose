@@ -18,6 +18,7 @@ import com.inar.kickercompose.data.models.states.MessageState
 import com.inar.kickercompose.data.models.states.MessageStyle
 import com.inar.kickercompose.data.models.states.keyboardAsState
 import com.inar.kickercompose.data.viemodels.TestViewModel
+import com.inar.kickercompose.other.strangeNavigate
 import com.inar.kickercompose.ui.navigation.AccountItems
 import kotlinx.coroutines.launch
 
@@ -76,7 +77,7 @@ fun RegistrationPage(vm: TestViewModel, navController: NavController) {
             }
 
             Text(modifier = Modifier.clickable {
-                navController.navigate(AccountItems.Login.route)
+                navController.strangeNavigate(AccountItems.Login.route)
             }, text = "To login")
 
         }

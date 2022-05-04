@@ -13,6 +13,18 @@ object ServiceUtil {
     const val RESTART_ACTION = "restartservice"
     const val LOG_TAG = "SignalService"
 
+
+    const val OPEN_LOBBY_EXTRA = "OpenLobby"
+    const val inviteMessId = 101
+    const val INVITE_MESSAGE_EXTRA = "InviteMessageParcel"
+    const val SENDING_ANSWER = "SENDINGANSWER"
+    const val IS_ACCEPT = "IsAccept"
+
+    object LobbyObserver {
+        const val BROADCAST_ACTION = "com.inar.KickerCompose::lobbyObserver"
+        const val LOBBY_MODEL_EXTRA = "LobbyModelExtra"
+    }
+
 //    fun createNotificationChannel(context: Context) {
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //            val importance = NotificationManager.IMPORTANCE_DEFAULT
@@ -26,7 +38,3 @@ object ServiceUtil {
 //    }
 }
 
-fun Activity.isMyServiceRunning(serviceClass: Class<*>) {
-    val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-    manager.getRunningServices(Int.MAX_VALUE)
-}

@@ -1,11 +1,14 @@
 package com.inar.kickercompose
 
+import android.app.NotificationManager
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -13,8 +16,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.app.NotificationManagerCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.inar.kickercompose.data.models.states.auth.AuthState
@@ -33,6 +38,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        with(NotificationManagerCompat.from(this)) {
+            cancel(ServiceUtil.inviteMessId)
+        }
         setContent {
             KickerComposeTheme {
                 // A surface container using the 'background' color from the theme
@@ -71,13 +79,8 @@ fun MainScreen(name: String) {
 
     LaunchedEffect(Unit) {
         vm.account.loginRefresh()
-
         val intent = Intent(context, SignalService::class.java)
         context.applicationContext.startService(intent);
-
-//        vm.hub.start() { i, j ->
-//            Toast.makeText(context, "hello", Toast.LENGTH_LONG).show()
-//        }
     }
 
     when (authState) {

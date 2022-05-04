@@ -1,6 +1,7 @@
 package com.inar.kickercompose.data.net.repositories
 
 import com.inar.kickercompose.data.net.network.NetworkService
+import com.inar.kickercompose.data.viemodels.AccountHandler
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -43,6 +44,13 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun createLobbyRepos(networkService: NetworkService): ILobbyRepository = LobbyRepository(networkService);
+    fun createLobbyRepos(
+        networkService: NetworkService,
+        accountHandler: AccountHandler,
+    ): ILobbyRepository = LobbyRepository(networkService, accountHandler);
 
+    @Singleton
+    @Provides
+    fun createLobbyMessagesRepos(networkService: NetworkService):ILobbyMessagesRepository =
+        LobbyMessagesRepository(networkService)
 }

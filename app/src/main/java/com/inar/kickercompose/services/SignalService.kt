@@ -1,21 +1,23 @@
 package com.inar.kickercompose.services
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.Service
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.res.integerArrayResource
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.inar.kickercompose.MainActivity
 import com.inar.kickercompose.R
+import com.inar.kickercompose.data.models.lobby.messages.InviteAnswer
+import com.inar.kickercompose.data.models.lobby.messages.InviteMessage
 import com.inar.kickercompose.data.net.signal.HubHandler
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -29,7 +31,6 @@ class SignalService : Service() {
 
     @Inject
     lateinit var hub: HubHandler
-
 
     override fun onCreate() {
         super.onCreate()
@@ -80,19 +81,80 @@ class SignalService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         startSignalR()
+        if (intent?.getBooleanExtra(ServiceUtil.SENDING_ANSWER, false) == true) {
+            val message = intent.getParcelableExtra<InviteMessage>(ServiceUtil.INVITE_MESSAGE_EXTRA)
+            val isAccept = intent.getBooleanExtra(ServiceUtil.IS_ACCEPT, false)
+            sendInviteAnswer(message!!, isAccept)
+        }
         return START_STICKY
     }
 
 
     private fun startSignalR() {
         try {
-            hub.start() { i, j ->
-                showNotification("just recieved", 101)
+            hub.start()
+            hub.inviteEvent = {
+                showNotificationInvite(it)
+            }
+            hub.yourLobbyChanged = { lobby ->
+                val intent = Intent(ServiceUtil.LobbyObserver.BROADCAST_ACTION).also {
+                    it.putExtra(ServiceUtil.LobbyObserver.LOBBY_MODEL_EXTRA, lobby)
+                }
+                sendBroadcast(intent)
             }
         } catch (e: Throwable) {
-            showNotification(e.message ?: "throw", 104);
+            showNotification(e.message ?: "throw", 104)
         }
 
+    }
+
+    private fun showNotificationInvite(message: InviteMessage) {
+        val intent = Intent(this, MainActivity::class.java).also {
+            it.putExtra(ServiceUtil.OPEN_LOBBY_EXTRA, true)
+            it.putExtra(ServiceUtil.INVITE_MESSAGE_EXTRA, message)
+        }
+
+        val peningIntent =
+            PendingIntent.getActivity(this,
+                0,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val noIntent = Intent(this, SignalService::class.java).also {
+            it.putExtra(ServiceUtil.SENDING_ANSWER, true)
+            it.putExtra(ServiceUtil.INVITE_MESSAGE_EXTRA, message)
+            it.putExtra(ServiceUtil.IS_ACCEPT, false)
+        }
+
+        val noPendingIntent = PendingIntent.getService(this,
+            0,
+            noIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+
+
+        val builder = NotificationCompat.Builder(this, ServiceUtil.CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_baseline_sports_soccer_24)
+            .setContentTitle("${message.senderName} invite you to a battle!")
+            .setContentText(message.message)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .addAction(R.drawable.ic_baseline_check_24, "Accept", peningIntent)
+            .addAction(R.drawable.ic_baseline_clear_24, "Refuse", noPendingIntent)
+
+        with(NotificationManagerCompat.from(this)) {
+            notify(ServiceUtil.inviteMessId, builder.build())
+        }
+    }
+
+    private fun sendInviteAnswer(message: InviteMessage, isAccept: Boolean) {
+        val answer = InviteAnswer().apply {
+            invitedId = message.invitedId
+            initiatorId = message.senderId
+            accepted = isAccept
+            side = message.side
+            position = message.position
+        }
+
+        hub.sendInviteAnswer(answer)
     }
 
     private fun showNotification(message: String, id: Int) {

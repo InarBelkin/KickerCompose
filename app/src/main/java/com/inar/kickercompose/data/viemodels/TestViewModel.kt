@@ -3,8 +3,10 @@ package com.inar.kickercompose.data.viemodels
 import android.util.Log
 import androidx.lifecycle.*
 import com.inar.kickercompose.data.models.LeaderboardWrapper
+import com.inar.kickercompose.data.models.lobby.LobbyItemModel
 import com.inar.kickercompose.data.models.states.loadstates.LoadedState
 import com.inar.kickercompose.data.models.userdetails.UserDetails
+import com.inar.kickercompose.data.net.repositories.ILobbyRepository
 import com.inar.kickercompose.data.net.repositories.IStatsRepository
 import com.inar.kickercompose.data.net.signal.HubHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,9 +15,12 @@ import javax.inject.Inject
 @HiltViewModel
 class TestViewModel @Inject constructor(
     private val repository: IStatsRepository,
+    private val lobby: ILobbyRepository,
     val account: AccountHandler,
     val hub: HubHandler,
+    val battle: BattlePart,
 ) : ViewModel() {
+
 
     init {
         Log.d("viewmodel", "created")
@@ -35,8 +40,6 @@ class TestViewModel @Inject constructor(
     suspend fun loadLeaderboard() {
         _delegateLeaderboard.reLoad { repository.getLeaderboard() }
     }
-
-
 
 
 }

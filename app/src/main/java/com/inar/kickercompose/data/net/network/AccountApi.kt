@@ -1,8 +1,10 @@
 package com.inar.kickercompose.data.net.network
 
 import com.inar.kickercompose.data.models.account.*
+import com.inar.kickercompose.data.models.answers.MessageBase
 import com.inar.kickercompose.data.net.Endpoints
 import retrofit2.http.Body
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface AccountApi {
@@ -14,4 +16,10 @@ interface AccountApi {
 
     @POST(Endpoints.accountApi + "refresh")
     suspend fun refresh(@Body dto: RefreshDto): LoginAnswerDto
+
+    @POST(Endpoints.accountApi + "logout")
+    suspend fun logout(
+        @Header("Authorization") authHeader: String,
+        @Body dto: LogoutDto,
+    ): MessageBase
 }

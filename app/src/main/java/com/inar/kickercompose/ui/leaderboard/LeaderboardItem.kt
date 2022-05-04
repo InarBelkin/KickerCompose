@@ -14,12 +14,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.inar.kickercompose.R
 import com.inar.kickercompose.data.models.UserLeaderboard
+import com.inar.kickercompose.data.models.lobby.UserStatus
 import com.inar.kickercompose.other.strangeNavigate
 import com.inar.kickercompose.ui.navigation.NavigationItems
 
@@ -33,21 +35,19 @@ fun LeaderboardItemPreview() {
 }
 
 @Composable
-fun LeaderboardItem(user: UserLeaderboard, navController: NavHostController? = null) {
+fun LeaderboardItem(user: UserLeaderboard, onClick: () -> Unit = {}) {
     val cardHeight = 60.dp
-    val textSize = 14.sp
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(7.dp)
             .height(cardHeight)
             .clickable {
-                navController?.strangeNavigate(NavigationItems.UserPage.clearRoute + user.id)
+                onClick.invoke()
             },
         border = BorderStroke(2.dp, MaterialTheme.colors.primary),
         shape = RoundedCornerShape(15.dp),
-
-        ) {
+    ) {
 
         Box(contentAlignment = Alignment.CenterStart) {
             Row(
@@ -72,7 +72,8 @@ fun LeaderboardItem(user: UserLeaderboard, navController: NavHostController? = n
         Box(contentAlignment = Alignment.Center) {
             Column(
                 modifier = Modifier.height(cardHeight),
-                verticalArrangement = Arrangement.SpaceEvenly
+                verticalArrangement = Arrangement.SpaceEvenly,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(text = user.name)
                 Text(text = "ELO:${user.elo}")
@@ -82,15 +83,37 @@ fun LeaderboardItem(user: UserLeaderboard, navController: NavHostController? = n
         Box(contentAlignment = Alignment.CenterEnd) {
             Column(
                 modifier = Modifier
-                    .padding(horizontal = 10.dp)
+                    .padding(horizontal = 12.dp)
                     .height(cardHeight),
-                verticalArrangement = Arrangement.SpaceEvenly
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.End
             ) {
-                Text(text = "B:${user.countOfBattles}")
-                Text(text = "V:${user.winsCount}")
+                val fontSize = 14.sp
+                Text(text = "B:${user.countOfBattles}", fontSize = fontSize)
+                Text(text = "V:${user.winsCount}", fontSize = fontSize)
+                Text(text = UserStatus.fromInt(user.status).description,
+                    fontStyle = FontStyle.Italic, fontSize = fontSize)
             }
         }
 
     }
 
+}
+
+@Composable
+fun FrameWithBorder(onClick: () -> Unit = {}, content: @Composable () -> Unit) {
+    val cardHeight = 60.dp
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(7.dp)
+            .height(cardHeight)
+            .clickable {
+                onClick.invoke()
+            },
+        border = BorderStroke(2.dp, MaterialTheme.colors.primary),
+        shape = RoundedCornerShape(15.dp),
+    ) {
+        content()
+    }
 }

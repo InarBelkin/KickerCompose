@@ -21,4 +21,5 @@ class NetworkService {
     val stats: StatsApi = mRetrofit.create(StatsApi::class.java);
     val account: AccountApi = mRetrofit.create(AccountApi::class.java)
     val lobby: LobbyApi = mRetrofit.create(LobbyApi::class.java)
+    val lobbyMessages: LobbyMessagesApi = mRetrofit.create(LobbyMessagesApi::class.java)
 }

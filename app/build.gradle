@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.inar.kickercompose"
-        minSdk 25
+        minSdk 26
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -103,6 +103,12 @@ dependencies {
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx3:1.6.0'
     implementation("androidx.core:core-ktx:1.7.0")
+
+    //compat
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.23.1"
+
+    //JWT
+    implementation 'com.auth0.android:jwtdecode:2.0.1'
 
 
 }

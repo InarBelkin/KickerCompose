@@ -6,10 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.contentColorFor
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -18,15 +15,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.inar.kickercompose.data.models.lobby.InviteRequestDto
 import com.inar.kickercompose.data.models.states.loadstates.BottomLoadOverlay
 import com.inar.kickercompose.data.models.userdetails.UserDetails
 import com.inar.kickercompose.data.viemodels.TestViewModel
+import com.inar.kickercompose.other.strangeNavigate
 import com.inar.kickercompose.ui.leaderboard.LeaderboardItem
+import com.inar.kickercompose.ui.navigation.NavigationItems
+import com.inar.kickercompose.ui.navigation.showAlert
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 @Composable
-fun UserPage(vm: TestViewModel, userId: String) {
+fun UserPage(vm: TestViewModel, userId: String, navHostController: NavHostController) {
 
     val user by vm.userDetailsLiveData.observeAsState()
     val scope = rememberCoroutineScope()
@@ -41,25 +44,29 @@ fun UserPage(vm: TestViewModel, userId: String) {
         if (user!!.value.isMe) {
             Column(modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = "My page", fontSize = 18.sp)
                 LeaderboardItem(user = user!!.value.toUserLeaderboard())
                 StatsCardSelector(user = user!!.value)
                 Text(text = user!!.value.isMe.toString())
 
             }
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-                StrokePseudoButton(text = "Settings") { }
+                StrokePseudoButton(text = "Settings") {
+                    navHostController.strangeNavigate(NavigationItems.SettingsPage.route)
+                }
             }
 
         } else {
             Column(modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = "User page", fontSize = 18.sp)
                 LeaderboardItem(user = user!!.value.toUserLeaderboard())
                 StrokePseudoButton(text = "Challenge to a duel!") {
-                    scope.launch {
-                        vm.hub.inviteOne(InviteRequestDto().apply {
-                            invitedId = user!!.value.id
-                            message = "mil zhopu"
-                        });
+                    scope.launch {  //TODO: invite request
+//                        vm.hub.inviteOne(InviteRequestDto().apply {
+//                            invitedId = user!!.value.id
+//                            message = "mil zhopu"
+//                        });
 
                     }
                 }

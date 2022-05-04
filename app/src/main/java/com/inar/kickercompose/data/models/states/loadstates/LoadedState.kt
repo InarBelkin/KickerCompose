@@ -17,13 +17,14 @@ sealed class LoadedState<T>(val value: T) {
         inline fun <T> loadJuggler(
             ld: MutableLiveData<LoadedState<T>>,
             loadingFun: () -> LoadedState<T>,
-        ) {
+        ): LoadedState<T> {
             ld.value = Loading(ld.value!!.value)
             when (val v = loadingFun.invoke()) {
                 is Success -> ld.value = v
                 is Error -> ld.value = Error(ld.value!!.value, v.error)
                 else -> {}
             }
+            return ld.value!!
         }
     }
 
@@ -33,8 +34,12 @@ sealed class LoadedState<T>(val value: T) {
             return _mld;
         }
 
-        suspend fun reLoad(loadingFun: suspend () -> LoadedState<T>) {
-            loadJuggler(_mld) { loadingFun.invoke() }
+        suspend fun reLoad(loadingFun: suspend () -> LoadedState<T>): LoadedState<T> {
+            return loadJuggler(_mld) { loadingFun.invoke() }
+        }
+
+        fun justChange(value: T) {
+            _mld.value = LoadedState.Success(value)
         }
     }
 

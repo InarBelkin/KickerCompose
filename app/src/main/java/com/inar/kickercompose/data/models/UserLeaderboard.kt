@@ -8,4 +8,5 @@ class UserLeaderboard {
     var winsCount: Int = 0
     var cups: Int = 0
     var place: Int = 0
+    var status: Int = 0
 }
