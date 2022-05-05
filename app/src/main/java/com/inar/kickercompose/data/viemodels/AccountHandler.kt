@@ -114,6 +114,7 @@ class AccountHandler @Inject constructor(
     suspend fun logOut() {
         account.logOut(getAccessToken() ?: "i ", LogoutDto(getRefreshToken() ?: ""))
         setTokens("", "");
+        _authState.value = AuthState.NotLogged("")
     }
 
     suspend fun register(registerDto: RegisterDto): MessageState {

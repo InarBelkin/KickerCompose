@@ -15,10 +15,6 @@ class LobbyRepository @Inject constructor(
     private val accountHandler: AccountHandler,
 ) : ILobbyRepository {
 
-    override suspend fun InviteOne(dto: InviteRequestDto) { //TODO: where is try catch?
-        networkService.lobby.inviteOne(dto)
-    }
-
     override suspend fun getLobbys(): LoadedState<List<LobbyItemModel>> {
         return loadWrapper { networkService.lobby.getLobbys("Bearer " + accountHandler.getAccessToken()) }
     }

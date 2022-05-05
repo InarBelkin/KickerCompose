@@ -11,7 +11,7 @@ interface LobbyApi {
     suspend fun inviteOne(@Body dto: InviteRequestDto): Unit
 
     @GET("api/Lobby")
-    suspend fun getLobbys(@Header("Authorization") authHeader: String): List<LobbyItemModel>
+    suspend fun getLobbys(@Header("Authorization") authHeader: String): ArrayList<LobbyItemModel>
 
     @GET("api/Lobby/lobby")
     suspend fun getMyLobby(@Header("Authorization") authHeader: String): LobbyItemModel?

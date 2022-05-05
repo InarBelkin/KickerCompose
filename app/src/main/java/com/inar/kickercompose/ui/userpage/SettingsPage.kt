@@ -8,6 +8,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -22,7 +23,7 @@ fun SettingsPage(vm: TestViewModel, navController: NavHostController) {
     val scope = rememberCoroutineScope()
 
     Box(modifier = Modifier.padding(7.dp)) {
-        Column() {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text = "My page", fontSize = 18.sp)
             Button(modifier = Modifier.fillMaxWidth(), onClick = {
                 scope.launch {

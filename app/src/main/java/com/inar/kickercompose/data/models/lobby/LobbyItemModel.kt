@@ -5,14 +5,15 @@ import android.os.Parcelable
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.collections.ArrayList
 
 class LobbyItemModel() : Parcelable {
     var dateStart: LocalDateTime? = null
     var message: String = ""
     var initiator: LobbyUserShortInfo = LobbyUserShortInfo()
 
-    var sideA: List<LobbyUserShortInfo> = emptyList()
-    var sideB: List<LobbyUserShortInfo> = emptyList()
+    var sideA: List<LobbyUserShortInfo> = arrayListOf()
+    var sideB: List<LobbyUserShortInfo> = arrayListOf()
 
     constructor(parcel: Parcel) : this() {
         val dateStartString = parcel.readString()

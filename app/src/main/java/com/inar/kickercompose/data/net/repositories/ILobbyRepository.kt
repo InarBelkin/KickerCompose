@@ -6,8 +6,6 @@ import com.inar.kickercompose.data.models.lobby.LobbyItemModel
 import com.inar.kickercompose.data.models.states.loadstates.LoadedState
 
 interface ILobbyRepository {
-    suspend fun InviteOne(dto: InviteRequestDto)
-
     suspend fun getLobbys(): LoadedState<List<LobbyItemModel>>
     suspend fun getMyLobby(): LoadedState<LobbyItemModel?>
 

@@ -28,6 +28,7 @@ import com.inar.kickercompose.services.Restarter
 import com.inar.kickercompose.services.ServiceUtil
 import com.inar.kickercompose.services.SignalService
 import com.inar.kickercompose.ui.account.AccountPage
+import com.inar.kickercompose.ui.account.LoginErrorPage
 import com.inar.kickercompose.ui.navigation.BottomNavBar
 import com.inar.kickercompose.ui.navigation.Navigation
 import com.inar.kickercompose.ui.theme.KickerComposeTheme
@@ -53,19 +54,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-    override fun onDestroy() {
-//        Intent(this, SignalService::class.java).also {
-//            stopService(it)
-//        }
-
-//        Intent().also {
-//            it.action = ServiceUtil.RESTART_ACTION
-//            it.setClass(this, Restarter::class.java)
-//            this.sendBroadcast(it)
-//        }
-        super.onDestroy()
-    }
 }
 
 
@@ -85,7 +73,7 @@ fun MainScreen(name: String) {
 
     when (authState) {
         is AuthState.Loading, is AuthState.Logged -> StandardApp(vm)
-        is AuthState.Error -> Text(text = "Login error")    //TODO:change connection error page and add button "try again"
+        is AuthState.Error -> LoginErrorPage(vm = vm)
         is AuthState.NotLogged -> AccountPage(vm)
     }
 

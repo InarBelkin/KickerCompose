@@ -2,7 +2,7 @@ package com.inar.kickercompose.data.models.lobby
 
 enum class Role(val num: Int,val description: String) {
     Attack(0, "Attack"),
-    Defense(1, "Attack");
+    Defense(1, "Defense");
 
     companion object {
         fun fromInt(value: Int) = Role.values().first { it.num == value }
