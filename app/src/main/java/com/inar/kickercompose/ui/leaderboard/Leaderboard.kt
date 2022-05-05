@@ -1,5 +1,6 @@
 package com.inar.kickercompose.ui.leaderboard
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -18,13 +20,17 @@ import com.inar.kickercompose.data.models.states.loadstates.BottomLoadOverlay
 import com.inar.kickercompose.data.viemodels.TestViewModel
 import com.inar.kickercompose.other.strangeNavigate
 import com.inar.kickercompose.ui.navigation.NavigationItems
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun Leaderboard(vm: TestViewModel, navController: NavHostController) {
+    val scope = rememberCoroutineScope()
     val users by vm.leaderboardLd.observeAsState()
     LaunchedEffect(Unit) {
-        vm.loadLeaderboard();
+        vm.loadLeaderboard()
     }
+
 
     Scaffold(topBar = {
         Card(
@@ -53,11 +59,8 @@ fun Leaderboard(vm: TestViewModel, navController: NavHostController) {
 
     }
 
-
-
     BottomLoadOverlay(users!!)
 }
-
 
 
 

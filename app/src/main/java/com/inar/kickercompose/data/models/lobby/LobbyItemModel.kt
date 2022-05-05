@@ -25,15 +25,6 @@ class LobbyItemModel() : Parcelable {
         sideB = parcel.createTypedArrayList(LobbyUserShortInfo)!!
     }
 
-
-    //    fun clone(): LobbyItemModel {
-//        var ret = LobbyItemModel().also {
-//            it.dateStart = dateStart
-//            it.message = message
-//            it.initiator = initiator
-//        }
-//        return ret
-//    }
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(dateStart?.format(DateTimeFormatter.ISO_DATE_TIME))
         parcel.writeString(message)

@@ -3,6 +3,7 @@ package com.inar.kickercompose.data.net.repositories
 import android.util.Log
 import com.inar.kickercompose.data.models.LeaderboardWrapper
 import com.inar.kickercompose.data.models.states.loadstates.LoadedState
+import com.inar.kickercompose.data.models.states.loadstates.loadWrapper
 import com.inar.kickercompose.data.models.userdetails.UserDetails
 import com.inar.kickercompose.data.net.network.NetworkService
 import com.inar.kickercompose.data.viemodels.AccountHandler
@@ -30,17 +31,3 @@ class StatsRepository @Inject constructor(
     }
 }
 
-inline fun <reified T> loadWrapper(loader: () -> T): LoadedState<T> {
-    try {
-        return LoadedState.Success(loader.invoke());
-    } catch (e: Exception) {
-        Log.e("repos", e.message ?: "")
-
-        val type = T::class.java
-        if (type.isInterface) {
-            if (type.name == "java.util.List" )
-                return LoadedState.Error(emptyList<Any>() as T, e)
-        }
-        return LoadedState.Error(type.newInstance(), e)
-    }
-}

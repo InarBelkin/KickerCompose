@@ -94,6 +94,14 @@ class BattlePart @Inject constructor(
 
     }
 
+    suspend fun kickUser(side: Int, position: Int): MessageBase {
+        val l = myLobbyLd.value!!.value!!
+        val item = if (side == 0) l.sideA[position]
+        else l.sideB[position]
+        item.accepted = IsAccepted.Kicked.a
+        return updateBattle(l)
+    }
+
     fun observeLobbyChanges(context: Context) {
         receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {

@@ -10,10 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.inar.kickercompose.data.viemodels.TestViewModel
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginErrorPage(vm: TestViewModel) {
+fun ConnectionErrorPage(vm: TestViewModel) {
     val scope = rememberCoroutineScope()
     Box(modifier = Modifier.padding(7.dp)) {
         Column(modifier = Modifier.fillMaxSize(),

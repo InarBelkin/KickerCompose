@@ -1,9 +1,11 @@
 package com.inar.kickercompose.data.net.repositories
 
+import android.util.Log
 import com.inar.kickercompose.data.models.answers.MessageBase
 import com.inar.kickercompose.data.models.lobby.InviteRequestDto
 import com.inar.kickercompose.data.models.lobby.LobbyItemModel
 import com.inar.kickercompose.data.models.states.loadstates.LoadedState
+import com.inar.kickercompose.data.models.states.loadstates.loadWrapper
 import com.inar.kickercompose.data.net.network.NetworkService
 import com.inar.kickercompose.data.viemodels.AccountHandler
 import javax.inject.Inject
@@ -16,11 +18,19 @@ class LobbyRepository @Inject constructor(
 ) : ILobbyRepository {
 
     override suspend fun getLobbys(): LoadedState<List<LobbyItemModel>> {
-        return loadWrapper { networkService.lobby.getLobbys("Bearer " + accountHandler.getAccessToken()) }
+        return loadWrapper {
+            networkService.lobby.getLobbys("Bearer " + accountHandler.getAccessToken())
+        }
     }
 
     override suspend fun getMyLobby(): LoadedState<LobbyItemModel?> {
-        return loadWrapper { networkService.lobby.getMyLobby("Bearer " + accountHandler.getAccessToken()) }
+        return loadWrapper {
+            try {
+                networkService.lobby.getMyLobby("Bearer " + accountHandler.getAccessToken())
+            } catch (e: KotlinNullPointerException) {   //this is not error
+                null
+            }
+        }
     }
 
     override suspend fun createLobby(dto: LobbyItemModel): MessageBase {
@@ -35,5 +45,7 @@ class LobbyRepository @Inject constructor(
         return networkService.lobby.deleteLobby(userId)
     }
 
-
+    companion object {
+        const val TAG = "lobbyRepository"
+    }
 }

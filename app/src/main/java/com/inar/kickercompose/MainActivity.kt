@@ -1,14 +1,9 @@
 package com.inar.kickercompose
 
-import android.app.NotificationManager
-import android.content.ComponentName
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -16,7 +11,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.NotificationManagerCompat
@@ -24,11 +18,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.inar.kickercompose.data.models.states.auth.AuthState
 import com.inar.kickercompose.data.viemodels.TestViewModel
-import com.inar.kickercompose.services.Restarter
 import com.inar.kickercompose.services.ServiceUtil
 import com.inar.kickercompose.services.SignalService
 import com.inar.kickercompose.ui.account.AccountPage
-import com.inar.kickercompose.ui.account.LoginErrorPage
+import com.inar.kickercompose.ui.account.ConnectionErrorPage
 import com.inar.kickercompose.ui.navigation.BottomNavBar
 import com.inar.kickercompose.ui.navigation.Navigation
 import com.inar.kickercompose.ui.theme.KickerComposeTheme
@@ -49,7 +42,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainScreen("Android")
+                    MainScreen()
                 }
             }
         }
@@ -58,7 +51,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun MainScreen(name: String) {
+fun MainScreen() {
 
     val context = LocalContext.current
 
@@ -72,8 +65,8 @@ fun MainScreen(name: String) {
     }
 
     when (authState) {
-        is AuthState.Loading, is AuthState.Logged -> StandardApp(vm)
-        is AuthState.Error -> LoginErrorPage(vm = vm)
+        is AuthState.Loading, is AuthState.Logged -> StandardApp(vm) //TODO: for loading made spinning thing
+        is AuthState.Error -> ConnectionErrorPage(vm = vm)
         is AuthState.NotLogged -> AccountPage(vm)
     }
 
@@ -94,6 +87,6 @@ fun StandardApp(vm: TestViewModel) {
 @Composable
 fun DefaultPreview() {
     KickerComposeTheme {
-        MainScreen("Android")
+        MainScreen()
     }
 }

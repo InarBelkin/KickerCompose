@@ -18,6 +18,7 @@ import com.inar.kickercompose.data.models.states.MessageState
 import com.inar.kickercompose.data.models.states.MessageStyle
 import com.inar.kickercompose.data.net.repositories.IAccountRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.first
 import java.lang.Exception
 import javax.inject.Inject
@@ -86,10 +87,13 @@ class AccountHandler @Inject constructor(
                 _authState.value = AuthState.NotLogged("");
             }
 
+        } catch (e: CancellationException) {
+            Log.e(tag, e.message ?: "job was cancelled")
         } catch (e: Exception) {
             Log.e(tag, e.message ?: "")
             _authState.value = AuthState.Error("", e)
         }
+
     }
 
     suspend fun login(loginDto: LoginDto): MessageState {

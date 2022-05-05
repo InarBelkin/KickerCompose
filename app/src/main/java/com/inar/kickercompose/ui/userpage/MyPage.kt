@@ -9,14 +9,12 @@ import com.inar.kickercompose.other.StrangeUtils
 
 @Composable
 fun MyPage(vm: TestViewModel, navHostController: NavHostController) {
-    var userId by remember { mutableStateOf("") }
 
-    LaunchedEffect(Unit) {
+    UserPage(vm = vm, navHostController) {
         val t = vm.account.getRefreshToken()!!
-        userId = StrangeUtils.decodeJwt(t);
+        val userId = StrangeUtils.decodeJwt(t)
+        vm.loadUserDetails(userId)
     }
-
-    UserPage(vm = vm, userId = userId, navHostController)
 
 
 }

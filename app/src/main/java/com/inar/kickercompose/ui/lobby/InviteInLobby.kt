@@ -36,14 +36,29 @@ fun InviteInLobby(vm: TestViewModel, navController: NavHostController, side: Int
         Column() {
             FrameWithBorder(onClick = {
                 scope.launch {
-                    addMe(context, vm,
+                    LobbyFuns.kickUser(context,
+                        vm,
                         navController,
                         side,
                         position)
                 }
             }) {
                 Box(contentAlignment = Alignment.Center) {
-                    Text(text = "Add myself")
+                    Text(text = "Kick the player")
+                }
+            }
+            if (meFilter(myId, vm)) {
+                FrameWithBorder(onClick = {
+                    scope.launch {
+                        addMe(context, vm,
+                            navController,
+                            side,
+                            position)
+                    }
+                }) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Text(text = "Add myself")
+                    }
                 }
             }
             FrameWithBorder() {
@@ -55,7 +70,8 @@ fun InviteInLobby(vm: TestViewModel, navController: NavHostController, side: Int
             Text(text = "Invite User:")
 
             LazyColumn(modifier = Modifier.fillMaxSize()) {
-                itemsIndexed(users!!.value.data.filter { it.id != myId }) { _, item ->
+                itemsIndexed(users!!.value.data.filter { it.id != myId && lobbyFilter(it.id, vm) })
+                { _, item ->
                     LeaderboardItem(user = item) {
                         scope.launch {
                             LobbyFuns.inviteOne(context, vm,
@@ -69,4 +85,22 @@ fun InviteInLobby(vm: TestViewModel, navController: NavHostController, side: Int
             }
         }
     }
+}
+
+fun lobbyFilter(userId: String, vm: TestViewModel): Boolean {
+    if (vm.battle.myLobbyLd.value!!.value == null) return false
+    val sideA = vm.battle.myLobbyLd.value!!.value?.sideA!!
+    val sideB = vm.battle.myLobbyLd.value!!.value?.sideB!!
+    val count = listOf(*sideA.toTypedArray(),
+        *sideB.toTypedArray()).filter { it.id == userId && it.accepted in arrayOf(1, 2) }.count()
+    return count == 0
+}
+
+fun meFilter(myId: String, vm: TestViewModel): Boolean {
+    if (vm.battle.myLobbyLd.value!!.value == null) return false
+    val sideA = vm.battle.myLobbyLd.value!!.value?.sideA!!
+    val sideB = vm.battle.myLobbyLd.value!!.value?.sideB!!
+    val count = listOf(*sideA.toTypedArray(),
+        *sideB.toTypedArray()).filter { it.id == myId }.count()
+    return count == 0
 }

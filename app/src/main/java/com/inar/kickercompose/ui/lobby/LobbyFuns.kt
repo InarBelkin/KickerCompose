@@ -132,5 +132,22 @@ object LobbyFuns {
         }
 
     }
+
+    suspend fun kickUser(
+        context: Context,
+        vm: TestViewModel,
+        navController: NavHostController,
+        side: Int,
+        position: Int,
+    ) {
+        try {
+            vm.battle.kickUser(side, position)
+            navController.strangeNavigate(NavigationItems.MyLobby.route)
+        } catch (e: Exception) {
+            Log.e(LOBBY_TAG, e.message ?: "")
+            showAlert(e.localizedMessage ?: "something went wrong", context)
+        }
+
+    }
 }
 

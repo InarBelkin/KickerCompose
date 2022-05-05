@@ -31,11 +31,24 @@ import java.lang.Exception
 @Composable
 fun UserPage(vm: TestViewModel, userId: String, navHostController: NavHostController) {
 
+    UserPage(vm = vm, navHostController = navHostController, suspend {
+        vm.loadUserDetails(userId)
+    })
+
+}
+
+@Composable
+fun UserPage(
+    vm: TestViewModel,
+    navHostController: NavHostController,
+    launchedFun: suspend () -> Unit,
+) {
     val user by vm.userDetailsLiveData.observeAsState()
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(userId) {
-        vm.loadUserDetails(userId)
+    LaunchedEffect(Unit) {
+        launchedFun.invoke()
+
     }
 
     Box(modifier = Modifier
@@ -77,6 +90,8 @@ fun UserPage(vm: TestViewModel, userId: String, navHostController: NavHostContro
     }
 
     BottomLoadOverlay(user!!)
+
+
 }
 
 @Composable
