@@ -1,6 +1,6 @@
 package com.inar.kickercompose.data.models.lobby
 
-enum class Role(val num: Int,val description: String) {
+enum class Role(val num: Int, val description: String) {
     Attack(0, "Attack"),
     Defense(1, "Defense");
 
@@ -9,12 +9,13 @@ enum class Role(val num: Int,val description: String) {
     }
 }
 
-enum class IsAccepted(val a: Int,val description: String) {
+enum class IsAccepted(val a: Int, val description: String) {
     Empty(0, "Empty"),
     Invited(1, "Invited"),
     Accepted(2, "Accepted"),
     Refused(3, "Invited"),
-    Kicked(4, "Kicked");
+    Kicked(4, "Kicked"),
+    AllInvited(5, "Everyone is invited");
 
     companion object {
         fun fromInt(value: Int) = IsAccepted.values().first { it.a == value }

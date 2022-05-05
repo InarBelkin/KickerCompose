@@ -34,17 +34,20 @@ fun InviteInLobby(vm: TestViewModel, navController: NavHostController, side: Int
     }
     Box(modifier = Modifier.padding(7.dp)) {
         Column() {
-            FrameWithBorder(onClick = {
-                scope.launch {
-                    LobbyFuns.kickUser(context,
-                        vm,
-                        navController,
-                        side,
-                        position)
-                }
-            }) {
-                Box(contentAlignment = Alignment.Center) {
-                    Text(text = "Kick the player")
+
+            if (kickFilter(vm, side, position)) {
+                FrameWithBorder(onClick = {
+                    scope.launch {
+                        LobbyFuns.kickUser(context,
+                            vm,
+                            navController,
+                            side,
+                            position)
+                    }
+                }) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Text(text = "Kick the player")
+                    }
                 }
             }
             if (meFilter(myId, vm)) {
@@ -61,7 +64,11 @@ fun InviteInLobby(vm: TestViewModel, navController: NavHostController, side: Int
                     }
                 }
             }
-            FrameWithBorder() {
+            FrameWithBorder(onClick = {
+                scope.launch {
+                    LobbyFuns.inviteAllUsers(context, vm, navController, side, position)
+                }
+            }) {
                 Box(contentAlignment = Alignment.Center) {
                     Text(text = "Invite All")
                 }
@@ -85,6 +92,13 @@ fun InviteInLobby(vm: TestViewModel, navController: NavHostController, side: Int
             }
         }
     }
+}
+
+fun kickFilter(vm: TestViewModel, side: Int, position: Int): Boolean {
+    val l = vm.battle.myLobbyLd.value!!.value!!
+    val item = if (side == 0) l.sideA[position]
+    else l.sideB[position]
+    return item.id != null
 }
 
 fun lobbyFilter(userId: String, vm: TestViewModel): Boolean {

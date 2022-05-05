@@ -11,6 +11,7 @@ import com.inar.kickercompose.other.strangeNavigate
 import com.inar.kickercompose.services.ServiceUtil
 import com.inar.kickercompose.ui.navigation.NavigationItems
 import com.inar.kickercompose.ui.navigation.showAlert
+import retrofit2.HttpException
 import java.lang.Exception
 
 const val LOBBY_TAG = "lobby"
@@ -149,5 +150,33 @@ object LobbyFuns {
         }
 
     }
+
+    suspend fun inviteAllUsers(
+        context: Context,
+        vm: TestViewModel,
+        navController: NavHostController,
+        side: Int,
+        position: Int,
+    ) {
+        sendInviteWrapper(context) {
+            vm.battle.inviteAll(side, position)
+            navController.navigate(NavigationItems.MyLobby.route)
+        }
+    }
+}
+
+inline fun sendInviteWrapper(context: Context, inner: () -> Unit) {
+    try {
+        inner.invoke()
+    } catch (e: HttpException) {
+        Log.e(LOBBY_TAG, e.message ?: "")
+        val body = e.response()?.errorBody()?.string() ?: ""
+        val message = e.localizedMessage ?: ""
+        showAlert(body + "\n" + message, context)
+    } catch (e: Exception) {
+        Log.e(LOBBY_TAG, e.message ?: "")
+        showAlert(e.localizedMessage ?: "something went wrong", context)
+    }
+
 }
 

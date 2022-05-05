@@ -78,9 +78,28 @@ class BattlePart @Inject constructor(
         return ret
     }
 
-    suspend fun stopBattle(myId: String) {
-        lobby.deleteLobby(myId)
+    suspend fun inviteAll(side: Int, position: Int) {
+        val l = myLobbyLd.value!!.value!!
+        val item = if (side == 0) l.sideA[position]
+        else l.sideB[position]
+
+        item.id = null
+        item.accepted = IsAccepted.AllInvited.a
+        val ret = updateBattle(l);
+        if (ret.success) {
+            val message = InviteMessage().also {
+                it.senderId = account.getUserClaims()?.id.toString()
+                it.senderName = account.getUserClaims()?.name.toString()
+                it.invitedId = "00000000-0000-0000-0000-000000000000"
+                it.message = l.message
+                it.side = side
+                it.position = position
+                it.isInviteToAll = true
+            }
+            lobbyMessages.inviteAll(message)
+        }
     }
+
 
     suspend fun sendInviteAnswer(invite: InviteMessage, accept: Boolean) {
         val answer = InviteAnswer().also {
@@ -101,6 +120,11 @@ class BattlePart @Inject constructor(
         item.accepted = IsAccepted.Kicked.a
         return updateBattle(l)
     }
+
+    suspend fun stopBattle(myId: String) {
+        lobby.deleteLobby(myId)
+    }
+
 
     fun observeLobbyChanges(context: Context) {
         receiver = object : BroadcastReceiver() {
