@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import androidx.navigation.NavHostController
 import com.inar.kickercompose.data.models.lobby.IsAccepted
+import com.inar.kickercompose.data.models.lobby.LobbyItemModel
 import com.inar.kickercompose.data.models.lobby.messages.InviteMessage
 import com.inar.kickercompose.data.viemodels.TestViewModel
 import com.inar.kickercompose.other.strangeNavigate
@@ -66,6 +67,15 @@ suspend fun addMe(
 }
 
 object LobbyFuns {
+
+    fun lobbyListClick(lobby: LobbyItemModel, vm: TestViewModel, navController: NavHostController) {
+        if (lobby.initiator.id == vm.battle.myLobbyLd.value!!.value?.initiator?.id) {
+            navController.strangeNavigate(NavigationItems.MyLobby.route)
+        } else {
+            navController.strangeNavigate(NavigationItems.GuestLobby.clearRoute + lobby.initiator.id)
+        }
+    }
+
     suspend fun inviteOne(
         context: Context,
         vm: TestViewModel,
@@ -120,9 +130,9 @@ object LobbyFuns {
                 if (isAccept) {
 
                     val message =
-                        context.intent.getParcelableExtra<InviteMessage>(ServiceUtil.INVITE_MESSAGE_EXTRA)
+                        context.intent.getParcelableExtra<InviteMessage>(ServiceUtil.InviteAnswer.INVITE_MESSAGE_EXTRA)
 
-                    vm.battle.sendInviteAnswer(message!!, true)
+                    vm.battle.sendInviteAnswerFromGuest(message!!, true)
 
                     navController.strangeNavigate(NavigationItems.Lobby.route)
                 }

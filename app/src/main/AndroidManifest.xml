@@ -3,8 +3,9 @@
     package="com.inar.kickercompose">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application
         android:name=".other.KickerComposeApp"
         android:allowBackup="true"
@@ -17,14 +18,14 @@
         android:usesCleartextTraffic="true">
         <service
             android:name=".services.SignalService"
-            android:enabled="true"
-            />
+            android:enabled="true" />
+
         <receiver
-            android:name=".services.Restarter"
+            android:name=".services.InviteAnswersBroadcastReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="restartservice" />
+                <action android:name="com.inar.KickerCompose::lobbyObserver::inviteAnswer" />
             </intent-filter>
         </receiver>
 

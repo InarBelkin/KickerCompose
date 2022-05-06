@@ -14,5 +14,6 @@ interface ILobbyRepository {
     suspend fun updateLobby(dto: LobbyItemModel): MessageBase
 
     suspend fun deleteLobby(userId: String): MessageBase
+    suspend fun getLobby(initiatorId: String): LoadedState<LobbyItemModel>
 
 }

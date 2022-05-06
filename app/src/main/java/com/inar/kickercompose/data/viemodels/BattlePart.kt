@@ -101,7 +101,7 @@ class BattlePart @Inject constructor(
     }
 
 
-    suspend fun sendInviteAnswer(invite: InviteMessage, accept: Boolean) {
+    suspend fun sendInviteAnswerFromGuest(invite: InviteMessage, accept: Boolean) {
         val answer = InviteAnswer().also {
             it.invitedId = invite.invitedId
             it.initiatorId = invite.senderId
@@ -110,7 +110,10 @@ class BattlePart @Inject constructor(
             it.position = invite.position
         }
         lobbyMessages.answerToInvite(answer)
+    }
 
+    suspend fun sendInviteAnswerFromGuest(answer: InviteAnswer) {
+        lobbyMessages.answerToInvite(answer)
     }
 
     suspend fun kickUser(side: Int, position: Int): MessageBase {

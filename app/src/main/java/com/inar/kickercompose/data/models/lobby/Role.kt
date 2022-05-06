@@ -13,7 +13,7 @@ enum class IsAccepted(val a: Int, val description: String) {
     Empty(0, "Empty"),
     Invited(1, "Invited"),
     Accepted(2, "Accepted"),
-    Refused(3, "Invited"),
+    Refused(3, "Refused"),
     Kicked(4, "Kicked"),
     AllInvited(5, "Everyone is invited");
 

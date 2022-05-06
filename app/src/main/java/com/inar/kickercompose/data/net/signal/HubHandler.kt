@@ -22,7 +22,7 @@ import javax.inject.Singleton
 
 @Singleton
 class HubHandler @Inject constructor(
-    private val account: AccountHandler,
+    val account: AccountHandler,
     @ApplicationContext private val appContext: Context,
     private val lobby: ILobbyRepository,
 ) {

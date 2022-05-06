@@ -8,6 +8,7 @@ import com.inar.kickercompose.data.models.states.loadstates.LoadedState
 import com.inar.kickercompose.data.models.states.loadstates.loadWrapper
 import com.inar.kickercompose.data.net.network.NetworkService
 import com.inar.kickercompose.data.viemodels.AccountHandler
+import retrofit2.http.Path
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,10 +28,14 @@ class LobbyRepository @Inject constructor(
         return loadWrapper {
             try {
                 networkService.lobby.getMyLobby("Bearer " + accountHandler.getAccessToken())
-            } catch (e: KotlinNullPointerException) {   //this is not error
+            } catch (e: KotlinNullPointerException) {   //this is not error, this is dumb
                 null
             }
         }
+    }
+
+    override suspend fun getLobby(initiatorId: String): LoadedState<LobbyItemModel> {
+        return loadWrapper { networkService.lobby.getLobby(initiatorId) }
     }
 
     override suspend fun createLobby(dto: LobbyItemModel): MessageBase {

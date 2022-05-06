@@ -2,7 +2,6 @@ package com.inar.kickercompose.data.net.network
 
 import com.inar.kickercompose.data.models.lobby.messages.InviteAnswer
 import com.inar.kickercompose.data.models.lobby.messages.InviteMessage
-import com.inar.kickercompose.data.net.Endpoints
 import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Path

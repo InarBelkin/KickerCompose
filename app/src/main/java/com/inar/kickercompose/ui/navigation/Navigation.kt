@@ -24,6 +24,7 @@ import com.inar.kickercompose.services.ServiceUtil
 import com.inar.kickercompose.ui.leaderboard.Leaderboard
 import com.inar.kickercompose.ui.lobby.InviteInLobby
 import com.inar.kickercompose.ui.lobby.LobbyFuns
+import com.inar.kickercompose.ui.lobby.LobbyGuestPage
 import com.inar.kickercompose.ui.lobby.MyLobby
 import com.inar.kickercompose.ui.userpage.MyPage
 import com.inar.kickercompose.ui.userpage.SettingsPage
@@ -53,6 +54,15 @@ fun Navigation(navHostController: NavHostController, vm: TestViewModel) {
 
         composable(NavigationItems.MyLobby.route) {
             MyLobby(vm, navHostController)
+        }
+
+        composable(NavigationItems.GuestLobby.route,
+            arguments = listOf(navArgument(NavigationItems.GuestLobby.id) {
+                type = NavType.StringType
+            })) {
+            LobbyGuestPage(initiatorId = it.arguments?.getString(NavigationItems.GuestLobby.id)!!,
+                vm = vm,
+                navController = navHostController)
         }
 
         composable(NavigationItems.InviteInMyLobby.route,

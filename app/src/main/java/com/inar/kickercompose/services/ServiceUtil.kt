@@ -16,13 +16,18 @@ object ServiceUtil {
 
     const val OPEN_LOBBY_EXTRA = "OpenLobby"
     const val inviteMessId = 101
-    const val INVITE_MESSAGE_EXTRA = "InviteMessageParcel"
-    const val SENDING_ANSWER = "SENDINGANSWER"
-    const val IS_ACCEPT = "IsAccept"
+
 
     object LobbyObserver {
         const val BROADCAST_ACTION = "com.inar.KickerCompose::lobbyObserver"
         const val LOBBY_MODEL_EXTRA = "LobbyModelExtra"
+    }
+
+    object InviteAnswer {
+        const val BROADCAST_ACTION = "com.inar.KickerCompose::lobbyObserver::inviteAnswer"
+        const val INVITE_MESSAGE_EXTRA = "InviteMessageParcel"
+        const val SENDING_ANSWER = "SENDINGANSWER"
+        const val IS_ACCEPT = "IsAccept"
     }
 
 //    fun createNotificationChannel(context: Context) {

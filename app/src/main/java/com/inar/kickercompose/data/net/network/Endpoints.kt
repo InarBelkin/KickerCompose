@@ -1,8 +1,9 @@
-package com.inar.kickercompose.data.net
+package com.inar.kickercompose.data.net.network
 
 object Endpoints {
     const val stats = "api/stats";
     const val accountApi = "api/users/"
-    const val lobbyApi = "api/lobby/"
+    const val lobbyApi = "api/Lobby/"
     const val lobbyMessagesApi = "/api/LobbyMessages/"
+
 }

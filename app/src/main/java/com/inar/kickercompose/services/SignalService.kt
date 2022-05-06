@@ -18,6 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -81,11 +82,11 @@ class SignalService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         startSignalR()
-        if (intent?.getBooleanExtra(ServiceUtil.SENDING_ANSWER, false) == true) {
-            val message = intent.getParcelableExtra<InviteMessage>(ServiceUtil.INVITE_MESSAGE_EXTRA)
-            val isAccept = intent.getBooleanExtra(ServiceUtil.IS_ACCEPT, false)
-            sendInviteAnswer(message!!, isAccept)
-        }
+//        if (intent?.getBooleanExtra(ServiceUtil.SENDING_ANSWER, false) == true) {
+//            val message = intent.getParcelableExtra<InviteMessage>(ServiceUtil.INVITE_MESSAGE_EXTRA)
+//            val isAccept = intent.getBooleanExtra(ServiceUtil.IS_ACCEPT, false)
+//            sendInviteAnswer(message!!, isAccept)
+//        }
         return START_STICKY
     }
 
@@ -109,52 +110,57 @@ class SignalService : Service() {
     }
 
     private fun showNotificationInvite(message: InviteMessage) {
-        val intent = Intent(this, MainActivity::class.java).also {
-            it.putExtra(ServiceUtil.OPEN_LOBBY_EXTRA, true)
-            it.putExtra(ServiceUtil.INVITE_MESSAGE_EXTRA, message)
-        }
+        scope.launch {
+            message.invitedId = hub.account.getUserClaims()?.id ?: ""
+            val intent = Intent(this@SignalService, MainActivity::class.java).also {
+                it.putExtra(ServiceUtil.OPEN_LOBBY_EXTRA, true)
+                it.putExtra(ServiceUtil.InviteAnswer.INVITE_MESSAGE_EXTRA, message)
+            }
 
-        val peningIntent =
-            PendingIntent.getActivity(this,
+            val peningIntent =
+                PendingIntent.getActivity(this@SignalService,
+                    0,
+                    intent,
+                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+
+            val noIntent = Intent(application, InviteAnswersBroadcastReceiver::class.java).also {
+                it.putExtra(ServiceUtil.InviteAnswer.SENDING_ANSWER, true)
+                it.putExtra(ServiceUtil.InviteAnswer.INVITE_MESSAGE_EXTRA, message)
+                it.putExtra(ServiceUtil.InviteAnswer.IS_ACCEPT, false)
+            }
+
+            val noPendingIntent = PendingIntent.getBroadcast(this@SignalService,
                 0,
-                intent,
+                noIntent,
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val noIntent = Intent(this, SignalService::class.java).also {
-            it.putExtra(ServiceUtil.SENDING_ANSWER, true)
-            it.putExtra(ServiceUtil.INVITE_MESSAGE_EXTRA, message)
-            it.putExtra(ServiceUtil.IS_ACCEPT, false)
+            val builder = NotificationCompat.Builder(this@SignalService, ServiceUtil.CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_baseline_sports_soccer_24)
+                .setContentTitle("${message.senderName} invite you to a battle!")
+                .setContentText(message.message)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .addAction(R.drawable.ic_baseline_check_24, "Accept", peningIntent)
+                .addAction(R.drawable.ic_baseline_clear_24, "Refuse", noPendingIntent)
+
+            with(NotificationManagerCompat.from(this@SignalService)) {
+                notify(ServiceUtil.inviteMessId, builder.build())
+            }
         }
 
-        val noPendingIntent = PendingIntent.getService(this,
-            0,
-            noIntent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-
-
-        val builder = NotificationCompat.Builder(this, ServiceUtil.CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_baseline_sports_soccer_24)
-            .setContentTitle("${message.senderName} invite you to a battle!")
-            .setContentText(message.message)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .addAction(R.drawable.ic_baseline_check_24, "Accept", peningIntent)
-            .addAction(R.drawable.ic_baseline_clear_24, "Refuse", noPendingIntent)
-
-        with(NotificationManagerCompat.from(this)) {
-            notify(ServiceUtil.inviteMessId, builder.build())
-        }
     }
 
     private fun sendInviteAnswer(message: InviteMessage, isAccept: Boolean) {
-        val answer = InviteAnswer().apply {
-            invitedId = message.invitedId
-            initiatorId = message.senderId
-            accepted = isAccept
-            side = message.side
-            position = message.position
-        }
+        scope.launch {
+            val answer = InviteAnswer().apply {
+                invitedId = hub.account.getUserClaims()?.id ?: ""
+                initiatorId = message.senderId
+                accepted = isAccept
+                side = message.side
+                position = message.position
+            }
 
-        hub.sendInviteAnswer(answer)
+            hub.sendInviteAnswer(answer)
+        }
     }
 
     private fun showNotification(message: String, id: Int) {

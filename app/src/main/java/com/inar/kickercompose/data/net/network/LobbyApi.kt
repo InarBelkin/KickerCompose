@@ -1,20 +1,19 @@
 package com.inar.kickercompose.data.net.network
 
 import com.inar.kickercompose.data.models.answers.MessageBase
-import com.inar.kickercompose.data.models.lobby.InviteRequestDto
 import com.inar.kickercompose.data.models.lobby.LobbyItemModel
-import com.inar.kickercompose.data.net.Endpoints
+import com.inar.kickercompose.ui.navigation.NavigationItems
 import retrofit2.http.*
 
 interface LobbyApi {
-    @POST(Endpoints.lobbyApi + "invite")
-    suspend fun inviteOne(@Body dto: InviteRequestDto): Unit
-
     @GET("api/Lobby")
     suspend fun getLobbys(@Header("Authorization") authHeader: String): ArrayList<LobbyItemModel>
 
-    @GET("api/Lobby/lobby")
+    @GET("api/Lobby/mylobby")
     suspend fun getMyLobby(@Header("Authorization") authHeader: String): LobbyItemModel?
+
+    @GET(Endpoints.lobbyApi + "lobby/{id}")
+    suspend fun getLobby(@Path(value = "id") initiatorId: String): LobbyItemModel
 
     @POST("api/Lobby")
     suspend fun createLobby(@Body dto: LobbyItemModel): MessageBase

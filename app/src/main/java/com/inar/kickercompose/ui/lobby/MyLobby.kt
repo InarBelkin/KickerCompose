@@ -1,8 +1,7 @@
 package com.inar.kickercompose.ui.lobby
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,6 +11,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -23,6 +23,7 @@ import com.inar.kickercompose.data.models.states.loadstates.BottomLoadOverlay
 import com.inar.kickercompose.data.viemodels.TestViewModel
 import kotlinx.coroutines.launch
 import java.lang.NullPointerException
+
 
 @Composable
 fun MyLobby(vm: TestViewModel, navController: NavHostController) {
@@ -63,7 +64,7 @@ fun LobbyIAmInitiator(lobby: LobbyItemModel, vm: TestViewModel, navController: N
     val context = LocalContext.current
 
     Column(modifier = Modifier.fillMaxSize()) {
-        Text(text = "Initiator - You, ${lobby.initiator.name}")
+        Text(text = "Initiator - You, ${lobby.initiator.name}", softWrap = true)
         TextField(value = lobby.message, onValueChange = {
 
         })
@@ -98,9 +99,11 @@ fun LobbyIAmInitiator(lobby: LobbyItemModel, vm: TestViewModel, navController: N
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FuckingUserInMyLobby(
     user: LobbyUserShortInfo,
+    isLongPress: Boolean = false,
     onClick: () -> Unit,
 ) {
     LaunchedEffect(Unit) {
@@ -111,9 +114,20 @@ fun FuckingUserInMyLobby(
             .fillMaxWidth()
             .padding(7.dp)
             .height(cardHeight)
-            .clickable {
-                onClick.invoke()
-            },
+            .combinedClickable(
+                onClick = { if (!isLongPress) onClick() },
+                onLongClick = { if (isLongPress) onClick }),
+//            .clickable {
+//                if (!isLongPress) onClick.invoke()
+//            }
+//            .pointerInput(Unit) {
+//                detectTapGestures(
+//
+//                    onLongPress = {
+//                        if (isLongPress) onClick.invoke()
+//                    }
+//                )
+//            },
         border = BorderStroke(2.dp, MaterialTheme.colors.primary),
         shape = RoundedCornerShape(15.dp),
     ) {

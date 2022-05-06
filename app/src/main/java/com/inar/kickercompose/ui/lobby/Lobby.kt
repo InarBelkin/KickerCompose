@@ -3,6 +3,7 @@ package com.inar.kickercompose.ui
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -29,6 +30,7 @@ import com.inar.kickercompose.data.models.lobby.LobbyUserShortInfo
 import com.inar.kickercompose.data.models.states.loadstates.BottomLoadOverlay
 import com.inar.kickercompose.data.models.states.loadstates.LoadedState
 import com.inar.kickercompose.data.viemodels.TestViewModel
+import com.inar.kickercompose.ui.lobby.LobbyFuns
 import com.inar.kickercompose.ui.lobby.createLobbyButton
 import com.inar.kickercompose.ui.lobby.toMyBattle
 import kotlinx.coroutines.launch
@@ -52,7 +54,7 @@ fun Lobby(vm: TestViewModel, navController: NavHostController) {
                     .fillMaxWidth(), onClick = { scope.launch { toMyBattle(vm, navController) } }) {
                     Text("To current battle!")
                 }
-            } else if (lobbys!! is LoadedState.Success) {
+            } else if (lobbys!! is LoadedState.Success && myLobby!!.value == null) {
                 Button(modifier = Modifier
                     .padding(7.dp)
                     .fillMaxWidth(), onClick = {
@@ -68,7 +70,9 @@ fun Lobby(vm: TestViewModel, navController: NavHostController) {
             Box(modifier = Modifier.padding(it)) {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     itemsIndexed(lobbys!!.value) { _, item ->
-                        LobbyItem(lobby = item, vm)
+                        LobbyItem(lobby = item, vm) {
+                            LobbyFuns.lobbyListClick(item, vm, navController)
+                        }
                     }
                 }
             }
@@ -79,7 +83,7 @@ fun Lobby(vm: TestViewModel, navController: NavHostController) {
 }
 
 @Composable
-fun LobbyItem(lobby: LobbyItemModel, vm: TestViewModel) {
+fun LobbyItem(lobby: LobbyItemModel, vm: TestViewModel, onClick: () -> Unit) {
     var isMy by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -87,13 +91,15 @@ fun LobbyItem(lobby: LobbyItemModel, vm: TestViewModel) {
         val count = listOf(*lobby.sideA.toTypedArray(),
             *lobby.sideB.toTypedArray(),
             lobby.initiator).filter { it.id == myid }.count()
-
         isMy = count > 0
     }
 
     Card(modifier = Modifier
         .fillMaxWidth()
-        .padding(7.dp),
+        .padding(7.dp)
+        .clickable {
+            onClick.invoke()
+        },
         border = BorderStroke(2.dp,
             if (isMy) MaterialTheme.colors.secondary else
                 MaterialTheme.colors.primary),

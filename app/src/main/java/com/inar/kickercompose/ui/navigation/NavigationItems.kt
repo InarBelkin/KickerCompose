@@ -17,6 +17,12 @@ sealed class NavigationItems(
         R.drawable.ic_baseline_person_24,
         "MyLobby")
 
+    object GuestLobby :
+        NavigationItems("guest_lobby/{id}", R.drawable.ic_baseline_person_24, "GuestLobby") {
+        const val clearRoute = "guest_lobby/"
+        const val id = "id"
+    }
+
     object SettingsPage : NavigationItems("settings", R.drawable.ic_baseline_person_24, "Settings")
     object InviteInMyLobby :
         NavigationItems("invite_lobby/{side}/{position}",
