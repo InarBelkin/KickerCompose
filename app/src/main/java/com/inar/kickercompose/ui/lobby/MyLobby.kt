@@ -116,7 +116,7 @@ fun FuckingUserInMyLobby(
             .height(cardHeight)
             .combinedClickable(
                 onClick = { if (!isLongPress) onClick() },
-                onLongClick = { if (isLongPress) onClick }),
+                onLongClick = { if (isLongPress) onClick() }),
 //            .clickable {
 //                if (!isLongPress) onClick.invoke()
 //            }
