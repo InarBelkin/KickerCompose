@@ -40,9 +40,15 @@ fun MyLobby(vm: TestViewModel, navController: NavHostController) {
         } catch (e: NullPointerException) {
         }
     }
+
     Box(modifier = Modifier.padding(7.dp)) {
-        if (iAmInitiator && mylobby!!.value != null) {
-            LobbyIAmInitiator(lobby = mylobby!!.value!!, vm, navController)
+        when {
+            iAmInitiator && mylobby!!.value != null -> {
+                LobbyIAmInitiator(lobby = mylobby!!.value!!, vm, navController)
+            }
+            mylobby!!.value != null -> {
+                MyLobbyInvited(mylobby!!.value!!, vm, navController)
+            }
         }
     }
 
@@ -52,7 +58,6 @@ fun MyLobby(vm: TestViewModel, navController: NavHostController) {
             vm.battle.disposeObserveLobbyChanges(context)
         }
     }
-
 
     BottomLoadOverlay(mylobby!!)
 }
@@ -117,17 +122,6 @@ fun FuckingUserInMyLobby(
             .combinedClickable(
                 onClick = { if (!isLongPress) onClick() },
                 onLongClick = { if (isLongPress) onClick() }),
-//            .clickable {
-//                if (!isLongPress) onClick.invoke()
-//            }
-//            .pointerInput(Unit) {
-//                detectTapGestures(
-//
-//                    onLongPress = {
-//                        if (isLongPress) onClick.invoke()
-//                    }
-//                )
-//            },
         border = BorderStroke(2.dp, MaterialTheme.colors.primary),
         shape = RoundedCornerShape(15.dp),
     ) {

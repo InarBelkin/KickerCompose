@@ -15,7 +15,8 @@ enum class IsAccepted(val a: Int, val description: String) {
     Accepted(2, "Accepted"),
     Refused(3, "Refused"),
     Kicked(4, "Kicked"),
-    AllInvited(5, "Everyone is invited");
+    AllInvited(5, "Everyone is invited"),
+    Left(6, "Left the battle");
 
     companion object {
         fun fromInt(value: Int) = IsAccepted.values().first { it.a == value }

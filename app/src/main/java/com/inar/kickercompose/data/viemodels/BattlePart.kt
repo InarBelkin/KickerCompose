@@ -11,12 +11,11 @@ import com.inar.kickercompose.data.models.lobby.LobbyUserShortInfo
 import com.inar.kickercompose.data.models.lobby.Role
 import com.inar.kickercompose.data.models.lobby.messages.InviteAnswer
 import com.inar.kickercompose.data.models.lobby.messages.InviteMessage
+import com.inar.kickercompose.data.models.lobby.messages.LeaveBattleDto
 import com.inar.kickercompose.data.models.states.loadstates.LoadedState
 import com.inar.kickercompose.data.net.repositories.ILobbyMessagesRepository
 import com.inar.kickercompose.data.net.repositories.ILobbyRepository
-import com.inar.kickercompose.other.strangeNavigate
 import com.inar.kickercompose.services.ServiceUtil
-import com.inar.kickercompose.ui.navigation.NavigationItems
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -43,22 +42,26 @@ class BattlePart @Inject constructor(
         _delegateMyLobby.reLoad { lobby.getMyLobby() }
     }
 
-    suspend fun startBattle(): MessageBase = lobby.createLobby(LobbyItemModel().apply {
-        message = "just battle"
-        initiator = LobbyUserShortInfo().apply {
-            id = account.getUserClaims()?.id
-        }
-        sideA = listOf(LobbyUserShortInfo().apply {
-            role = Role.Attack.num;accepted = IsAccepted.Empty.a
-        }, LobbyUserShortInfo().apply {
-            role = Role.Defense.num;accepted = IsAccepted.Empty.a
+    suspend fun startBattle(isTwoPlayers: Boolean): MessageBase =
+        lobby.createLobby(LobbyItemModel().apply {
+            message = "just battle"
+            initiator = LobbyUserShortInfo().apply {
+                id = account.getUserClaims()?.id
+            }
+
+            fun addUsers(): List<LobbyUserShortInfo> = if (isTwoPlayers) listOf(
+                LobbyUserShortInfo().apply {
+                    role = Role.Attack.num;accepted = IsAccepted.Empty.a
+                }, LobbyUserShortInfo().apply {
+                    role = Role.Defense.num;accepted = IsAccepted.Empty.a
+                })
+            else listOf(LobbyUserShortInfo().apply {
+                role = Role.Attack.num;accepted = IsAccepted.Empty.a
+            })
+
+            sideA = addUsers()
+            sideB = addUsers()
         })
-        sideB = listOf(LobbyUserShortInfo().apply {
-            role = Role.Attack.num;accepted = IsAccepted.Empty.a
-        }, LobbyUserShortInfo().apply {
-            role = Role.Defense.num;accepted = IsAccepted.Empty.a
-        })
-    })
 
     suspend fun updateBattle(lobbyModel: LobbyItemModel): MessageBase =
         lobby.updateLobby(lobbyModel)
@@ -126,6 +129,10 @@ class BattlePart @Inject constructor(
 
     suspend fun stopBattle(myId: String) {
         lobby.deleteLobby(myId)
+    }
+
+    suspend fun leaveBattle(dto: LeaveBattleDto) {
+        lobbyMessages.leaveBattle(dto)
     }
 
 

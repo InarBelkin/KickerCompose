@@ -17,23 +17,8 @@ import java.lang.Exception
 
 const val LOBBY_TAG = "lobby"
 
-suspend fun createLobbyButton(
-    vm: TestViewModel,
-    navController: NavHostController,
-    context: Context,
-) {
-    try {
-        val message = vm.battle.startBattle()
-        if (message.success)
-            navController.strangeNavigate(NavigationItems.MyLobby.route)
-        else showAlert("message", context)
-    } catch (e: Exception) {
-        Log.e(LOBBY_TAG, e.message ?: "")
-        showAlert(e.localizedMessage ?: "something went wrong", context)
-    }
-}
 
-suspend fun toMyBattle(vm: TestViewModel, navController: NavHostController) {
+fun toMyBattle(vm: TestViewModel, navController: NavHostController) {
     navController.strangeNavigate(NavigationItems.MyLobby.route)
 }
 
@@ -67,6 +52,22 @@ suspend fun addMe(
 }
 
 object LobbyFuns {
+    suspend fun createLobbyButton(
+        isTwoPlayers: Boolean,
+        vm: TestViewModel,
+        navController: NavHostController,
+        context: Context,
+    ) {
+        try {
+            val message = vm.battle.startBattle(isTwoPlayers)
+            if (message.success)
+                navController.strangeNavigate(NavigationItems.MyLobby.route)
+            else showAlert("message", context)
+        } catch (e: Exception) {
+            Log.e(LOBBY_TAG, e.message ?: "")
+            showAlert(e.localizedMessage ?: "something went wrong", context)
+        }
+    }
 
     fun lobbyListClick(lobby: LobbyItemModel, vm: TestViewModel, navController: NavHostController) {
         if (lobby.initiator.id == vm.battle.myLobbyLd.value!!.value?.initiator?.id) {

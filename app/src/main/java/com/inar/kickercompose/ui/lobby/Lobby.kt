@@ -30,8 +30,8 @@ import com.inar.kickercompose.data.models.lobby.LobbyUserShortInfo
 import com.inar.kickercompose.data.models.states.loadstates.BottomLoadOverlay
 import com.inar.kickercompose.data.models.states.loadstates.LoadedState
 import com.inar.kickercompose.data.viemodels.TestViewModel
+import com.inar.kickercompose.ui.lobby.CreateLobbyAlert
 import com.inar.kickercompose.ui.lobby.LobbyFuns
-import com.inar.kickercompose.ui.lobby.createLobbyButton
 import com.inar.kickercompose.ui.lobby.toMyBattle
 import kotlinx.coroutines.launch
 
@@ -41,6 +41,7 @@ fun Lobby(vm: TestViewModel, navController: NavHostController) {
     val lobbys by vm.battle.lobbyLd.observeAsState()
     val myLobby by vm.battle.myLobbyLd.observeAsState()
     val scope = rememberCoroutineScope()
+    var isCreateBattleDialogOpen by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         vm.battle.loadLobby()
         vm.battle.loadMyLobby()
@@ -51,16 +52,14 @@ fun Lobby(vm: TestViewModel, navController: NavHostController) {
             if (myLobby!! is LoadedState.Success && myLobby!!.value != null) {
                 Button(modifier = Modifier
                     .padding(7.dp)
-                    .fillMaxWidth(), onClick = { scope.launch { toMyBattle(vm, navController) } }) {
+                    .fillMaxWidth(), onClick = { toMyBattle(vm, navController) }) {
                     Text("To current battle!")
                 }
             } else if (lobbys!! is LoadedState.Success && myLobby!!.value == null) {
                 Button(modifier = Modifier
                     .padding(7.dp)
                     .fillMaxWidth(), onClick = {
-                    scope.launch {
-                        createLobbyButton(vm, navController, context)
-                    }
+                    isCreateBattleDialogOpen = true
                 }) {
                     Text("Create battle!")
                 }
@@ -77,6 +76,10 @@ fun Lobby(vm: TestViewModel, navController: NavHostController) {
                 }
             }
         }
+    }
+
+    CreateLobbyAlert(isOpen = isCreateBattleDialogOpen, vm, navController) {
+        isCreateBattleDialogOpen = false
     }
 
     BottomLoadOverlay(lobbys!!)
