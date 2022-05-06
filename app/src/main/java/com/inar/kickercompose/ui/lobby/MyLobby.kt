@@ -52,13 +52,6 @@ fun MyLobby(vm: TestViewModel, navController: NavHostController) {
         }
     }
 
-    DisposableEffect(context) {
-        vm.battle.observeLobbyChanges(context)
-        onDispose {
-            vm.battle.disposeObserveLobbyChanges(context)
-        }
-    }
-
     BottomLoadOverlay(mylobby!!)
 }
 

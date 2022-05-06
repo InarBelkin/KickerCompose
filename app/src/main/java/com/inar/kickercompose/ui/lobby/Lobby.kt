@@ -46,6 +46,13 @@ fun Lobby(vm: TestViewModel, navController: NavHostController) {
         vm.battle.loadLobby()
         vm.battle.loadMyLobby()
     }
+    DisposableEffect(context) {
+        vm.battle.observeLobbyChanges(context)
+        onDispose {
+            vm.battle.disposeObserveLobbyChanges(context)
+        }
+    }
+
 
     Box(modifier = Modifier.padding(7.dp)) {
         Scaffold(bottomBar = {

@@ -28,18 +28,23 @@ sealed class LoadedState<T>(val value: T) {
         }
     }
 
-    class DelegateLiveData<T>(initValue: T) {
+    class DelegateLiveData<T>(
+        initValue: T,
+        private val interceptor: (LoadedState<T>) -> Unit = {},
+    ) {
         private val _mld = MutableLiveData<LoadedState<T>>(Loading(initValue))
         operator fun getValue(thisRef: Any?, property: KProperty<*>): LiveData<LoadedState<T>> {
             return _mld;
         }
 
-        suspend fun reLoad(loadingFun: suspend () -> LoadedState<T>): LoadedState<T> {
-            return loadJuggler(_mld) { loadingFun.invoke() }
+        suspend fun reLoad(loadingFun: suspend () -> LoadedState<T>) {
+            val rez = loadJuggler(_mld) { loadingFun.invoke() }
+            interceptor(rez)
         }
 
         fun justChange(value: T) {
             _mld.value = LoadedState.Success(value)
+            interceptor(LoadedState.Success(value))
         }
     }
 

@@ -1,6 +1,5 @@
 package com.inar.kickercompose.ui.userpage
 
-import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,32 +12,29 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.inar.kickercompose.data.models.lobby.InviteRequestDto
 import com.inar.kickercompose.data.models.states.loadstates.BottomLoadOverlay
 import com.inar.kickercompose.data.models.userdetails.UserDetails
 import com.inar.kickercompose.data.viemodels.TestViewModel
 import com.inar.kickercompose.other.strangeNavigate
 import com.inar.kickercompose.ui.leaderboard.LeaderboardItem
+import com.inar.kickercompose.ui.lobby.CreateLobbyAlert
 import com.inar.kickercompose.ui.navigation.NavigationItems
-import com.inar.kickercompose.ui.navigation.showAlert
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 @Composable
 fun UserPage(vm: TestViewModel, userId: String, navHostController: NavHostController) {
 
-    UserPage(vm = vm, navHostController = navHostController, suspend {
+    UserPageEmbedded(vm = vm, navHostController = navHostController, suspend {
         vm.loadUserDetails(userId)
     })
 
 }
 
 @Composable
-fun UserPage(
+fun UserPageEmbedded(
     vm: TestViewModel,
     navHostController: NavHostController,
     launchedFun: suspend () -> Unit,
@@ -46,9 +42,10 @@ fun UserPage(
     val user by vm.userDetailsLiveData.observeAsState()
     val scope = rememberCoroutineScope()
 
+    var isInviteDialogOpen by remember { mutableStateOf(false) }
+
     LaunchedEffect(Unit) {
         launchedFun.invoke()
-
     }
 
     Box(modifier = Modifier
@@ -70,23 +67,29 @@ fun UserPage(
             }
 
         } else {
+
             Column(modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = "User page", fontSize = 18.sp)
                 LeaderboardItem(user = user!!.value.toUserLeaderboard())
                 StrokePseudoButton(text = "Challenge to a duel!") {
-                    scope.launch {  //TODO: invite request
-//                        vm.hub.inviteOne(InviteRequestDto().apply {
-//                            invitedId = user!!.value.id
-//                            message = "mil zhopu"
-//                        });
-
-                    }
+                    isInviteDialogOpen = true
                 }
                 StatsCardSelector(user = user!!.value)
                 Text(text = user!!.value.isMe.toString())
             }
+
         }
+    }
+
+    user?.value?.let {
+        InviteToDuelAlert(
+        invitedId = it.id,
+        isOpen = isInviteDialogOpen,
+        vm = vm,
+        navController = navHostController) {
+        isInviteDialogOpen = false
+    }
     }
 
     BottomLoadOverlay(user!!)

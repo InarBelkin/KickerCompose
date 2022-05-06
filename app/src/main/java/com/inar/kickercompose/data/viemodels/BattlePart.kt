@@ -16,6 +16,8 @@ import com.inar.kickercompose.data.models.states.loadstates.LoadedState
 import com.inar.kickercompose.data.net.repositories.ILobbyMessagesRepository
 import com.inar.kickercompose.data.net.repositories.ILobbyRepository
 import com.inar.kickercompose.services.ServiceUtil
+import retrofit2.HttpException
+import java.lang.Exception
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -31,7 +33,15 @@ class BattlePart @Inject constructor(
     val lobbyLd by _delegateLobby
 
 
-    private val _delegateMyLobby = LoadedState.DelegateLiveData<LobbyItemModel?>(null)
+    private val _delegateMyLobby = LoadedState.DelegateLiveData<LobbyItemModel?>(null) { myLobby ->
+        if (myLobby.value != null && myLobby is LoadedState.Success && lobbyLd.value is LoadedState.Success) {
+            val rez =
+                listOf(*lobbyLd.value!!.value.filter { it.initiator.id != myLobby.value?.initiator?.id }
+                    .toTypedArray(), myLobby.value!!)
+            _delegateLobby.justChange(rez)
+        }
+    }
+
     val myLobbyLd by _delegateMyLobby
 
     suspend fun loadLobby() {
@@ -65,6 +75,52 @@ class BattlePart @Inject constructor(
 
     suspend fun updateBattle(lobbyModel: LobbyItemModel): MessageBase =
         lobby.updateLobby(lobbyModel)
+
+    suspend fun createAndInvite(invitedId: String, message: String): MessageBase {
+        if (myLobbyLd.value?.value != null) return MessageBase(true, "")
+        try {
+            val claims = account.getUserClaims()!!
+            val creatingLobby = LobbyItemModel().also {
+                it.message = message
+
+                it.initiator = LobbyUserShortInfo().apply {
+                    id = claims.id
+                    role = Role.Attack.num
+                    accepted = IsAccepted.Accepted.a
+                }
+
+                it.sideA = listOf(
+                    it.initiator
+                )
+
+                it.sideB = listOf(
+                    LobbyUserShortInfo().apply {
+                        id = invitedId
+                        role = Role.Attack.num
+                        accepted = IsAccepted.Invited.a
+                    }
+                )
+            }
+
+            val isCreated = lobby.createLobby(creatingLobby);
+            if (isCreated.success) {
+                val inviteMessage = InviteMessage().also {
+                    it.senderId = claims.id
+                    it.senderName = claims.name
+                    it.invitedId = invitedId
+                    it.message = message
+                    it.side = 1
+                    it.position = 0
+                }
+                lobbyMessages.inviteOne(invitedId, inviteMessage)
+            }
+            return MessageBase(true, "Success!")
+        } catch (e: HttpException) {
+            return MessageBase(false, e.message())
+        } catch (e: Exception) {
+            return MessageBase(false, e.message ?: "error")
+        }
+    }
 
 
     suspend fun inviteOne(invitedId: String, message: InviteMessage): MessageBase {

@@ -1,15 +1,11 @@
 package com.inar.kickercompose.ui.navigation
 
-import android.app.Activity
-import android.media.audiofx.Equalizer
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.core.app.NotificationManagerCompat
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -20,7 +16,6 @@ import androidx.navigation.navArgument
 import com.inar.kickercompose.other.strangeNavigate
 import com.inar.kickercompose.ui.Lobby
 import com.inar.kickercompose.data.viemodels.TestViewModel
-import com.inar.kickercompose.services.ServiceUtil
 import com.inar.kickercompose.ui.leaderboard.Leaderboard
 import com.inar.kickercompose.ui.lobby.InviteInLobby
 import com.inar.kickercompose.ui.lobby.LobbyFuns
