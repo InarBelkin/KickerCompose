@@ -18,6 +18,7 @@ import com.inar.kickercompose.data.net.repositories.ILobbyRepository
 import com.inar.kickercompose.services.ServiceUtil
 import retrofit2.HttpException
 import java.lang.Exception
+import java.lang.IllegalArgumentException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -207,8 +208,13 @@ class BattlePart @Inject constructor(
     }
 
     fun disposeObserveLobbyChanges(context: Context) {
-        if (this::receiver.isInitialized) {
-            context.unregisterReceiver(receiver)
+        try {
+            if (this::receiver.isInitialized) {
+                context.unregisterReceiver(receiver)
+            }
+        } catch (e: IllegalArgumentException) {
+
         }
+
     }
 }
