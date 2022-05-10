@@ -30,6 +30,12 @@ object ServiceUtil {
         const val IS_ACCEPT = "IsAccept"
     }
 
+    object LobbyDeleted {
+        const val BROADCAST_ACTION = "com.inar.KickerCompose::lobbyDeletedObserver"
+        const val WITH_RESULTS = "WITH_RESULTS"
+        const val BATTLE_ID = "BATTLE_ID"
+    }
+
 //    fun createNotificationChannel(context: Context) {
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //            val importance = NotificationManager.IMPORTANCE_DEFAULT

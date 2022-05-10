@@ -8,6 +8,7 @@ import com.inar.kickercompose.data.models.lobby.messages.InviteMessage
 import com.inar.kickercompose.data.models.lobby.messages.LeaveBattleDto
 import com.inar.kickercompose.data.net.network.NetworkService
 import com.inar.kickercompose.data.net.repositories.interfaces.ILobbyMessagesRepository
+import retrofit2.http.Path
 import javax.inject.Inject
 
 class LobbyMessagesRepository @Inject constructor(private val networkService: NetworkService) :
@@ -30,5 +31,9 @@ class LobbyMessagesRepository @Inject constructor(private val networkService: Ne
 
     override suspend fun endBattle(dto: LobbyItemModel): BattleAnswerMessage {
         return networkService.lobbyMessages.endBattle(dto)
+    }
+
+    override suspend fun earlyEndBattle(id: String): MessageBase{
+        return networkService.lobbyMessages.earlyEndBattle(id)
     }
 }

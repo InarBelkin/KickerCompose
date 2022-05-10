@@ -28,7 +28,6 @@ class InviteAnswersBroadcastReceiver : BroadcastReceiver() {
             with(NotificationManagerCompat.from(context)) {
                 cancel(ServiceUtil.inviteMessId)
             }
-
         }
 
         Log.i("broadcast", "cancel invite")

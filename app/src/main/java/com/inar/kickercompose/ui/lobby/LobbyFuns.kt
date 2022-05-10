@@ -110,7 +110,7 @@ object LobbyFuns {
         navController: NavHostController,
     ) {
         try {
-            vm.battle.stopBattle(vm.account.getUserClaims()!!.id)
+            vm.battle.earlyEndBattle(vm.account.getUserClaims()!!.id)
             navController.strangeNavigate(NavigationItems.Lobby.route)
         } catch (e: Exception) {
             Log.e(LOBBY_TAG, e.message ?: "")

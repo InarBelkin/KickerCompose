@@ -1,5 +1,6 @@
 package com.inar.kickercompose.ui.lobby
 
+import android.content.Context
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -19,7 +20,9 @@ import com.inar.kickercompose.data.models.lobby.*
 import com.inar.kickercompose.data.models.lobby.item.LobbyItemModel
 import com.inar.kickercompose.data.models.states.loadstates.BottomLoadOverlay
 import com.inar.kickercompose.data.viemodels.TestViewModel
+import com.inar.kickercompose.other.strangeNavigate
 import com.inar.kickercompose.ui.lobby.one.MyLobbyScreens
+import com.inar.kickercompose.ui.navigation.NavigationItems
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.lang.NullPointerException
@@ -43,6 +46,18 @@ fun MyLobby(vm: TestViewModel, navController: NavHostController) {
         } catch (e: NullPointerException) {
         }
     }
+
+    DisposableEffect(context) {
+        vm.battle.observeLobbyDeleted(context) { i, m ->
+            if (!i) navController.strangeNavigate(NavigationItems.Lobby.route)
+            else navController.strangeNavigate(NavigationItems.BattleResult.clearRoute + m)
+        }
+        onDispose {
+        //    vm.battle.disposeObserveDeleted(context)
+        }
+    }
+
+
 
     Box(modifier = Modifier
         .padding(7.dp)

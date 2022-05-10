@@ -15,4 +15,5 @@ interface ILobbyMessagesRepository {
     suspend fun answerToInvite(dto: InviteAnswer)
     suspend fun leaveBattle(dto: LeaveBattleDto): MessageBase
     suspend fun endBattle(dto: LobbyItemModel): BattleAnswerMessage
+    suspend fun earlyEndBattle(id: String): MessageBase
 }

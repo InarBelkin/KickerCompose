@@ -37,6 +37,7 @@ class BattlePart @Inject constructor(
     private val lobbyMessages: ILobbyMessagesRepository,
 ) {
     private lateinit var receiver: BroadcastReceiver
+    private lateinit var deleteReceiver: BroadcastReceiver
 
     private val _delegateLobby = LoadedState.DelegateLiveData<List<LobbyItemModel>>(emptyList())
     val lobbyLd by _delegateLobby
@@ -267,8 +268,8 @@ class BattlePart @Inject constructor(
         return updateBattle(l)
     }
 
-    suspend fun stopBattle(myId: String) {
-        lobby.deleteLobby(myId)
+    suspend fun earlyEndBattle(myId: String) {
+        lobbyMessages.earlyEndBattle(myId)
     }
 
     suspend fun leaveBattle(dto: LeaveBattleDto) {
@@ -298,6 +299,29 @@ class BattlePart @Inject constructor(
         } catch (e: IllegalArgumentException) {
 
         }
-
     }
+
+    fun observeLobbyDeleted(context: Context, action: (Boolean, String) -> Unit) {
+        deleteReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                val withResult =
+                    intent.getBooleanExtra(ServiceUtil.LobbyDeleted.WITH_RESULTS, false)
+                val battleId = intent.getStringExtra(ServiceUtil.LobbyDeleted.BATTLE_ID)!!
+                action(withResult, battleId);
+            }
+        }
+        val intentFilter = IntentFilter(ServiceUtil.LobbyDeleted.BROADCAST_ACTION)
+        context.registerReceiver(deleteReceiver, intentFilter)
+    }
+
+    fun disposeObserveDeleted(context: Context) {
+        try {
+            if (this::deleteReceiver.isInitialized) {
+                context.unregisterReceiver(deleteReceiver)
+            }
+        } catch (e: IllegalArgumentException) {
+        }
+    }
+
+
 }

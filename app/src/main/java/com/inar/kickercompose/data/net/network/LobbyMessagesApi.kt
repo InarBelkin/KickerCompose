@@ -7,6 +7,7 @@ import com.inar.kickercompose.data.models.lobby.messages.InviteAnswer
 import com.inar.kickercompose.data.models.lobby.messages.InviteMessage
 import com.inar.kickercompose.data.models.lobby.messages.LeaveBattleDto
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -26,4 +27,8 @@ interface LobbyMessagesApi {
 
     @POST(Endpoints.lobbyMessagesApi + "end")
     suspend fun endBattle(@Body dto: LobbyItemModel): BattleAnswerMessage
+
+    @DELETE(Endpoints.lobbyMessagesApi + "earlyend/{id}")
+    suspend fun earlyEndBattle(@Path(value = "id") id: String): MessageBase
+
 }

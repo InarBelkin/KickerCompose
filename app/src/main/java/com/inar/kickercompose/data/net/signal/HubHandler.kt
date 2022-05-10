@@ -60,21 +60,35 @@ class HubHandler @Inject constructor(
             yourLobbyChanged?.invoke(rez)
         }, String::class.java)
 
-        hub.on("YourLobbyDeleted") {
-            yourLobbyDeleted?.invoke()
-        }
+        hub.on("YourLobbyDeleted",
+            { r, battleId -> yourLobbyDeleted?.invoke(r, battleId) },
+            Boolean::class.java,
+            String::class.java)
 
+        hub.onClosed {
+            Log.d(TAG, "hub losted connection")
+
+            hub = HubConnectionBuilder.create(url)
+                .withAccessTokenProvider(
+                    rxSingle {
+                        account.getAccessToken() ?: ""
+                    }
+                ).build()
+        }
         hub.start()
     }
 
     var inviteEvent: ((InviteMessage) -> Unit)? = null
     var answerInviteEvent: ((InviteAnswer) -> Unit)? = null
     var yourLobbyChanged: ((LobbyItemModel) -> Unit)? = null
-    var yourLobbyDeleted: (() -> Unit)? = null
+    var yourLobbyDeleted: ((Boolean, String) -> Unit)? = null
 
     fun sendInviteAnswer(answer: InviteAnswer) {
         hub.invoke("AnswerToInvite", answer)
     }
 
+    companion object {
+        const val TAG = "HubHandler"
+    }
 
 }

@@ -82,11 +82,6 @@ class SignalService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         startSignalR()
-//        if (intent?.getBooleanExtra(ServiceUtil.SENDING_ANSWER, false) == true) {
-//            val message = intent.getParcelableExtra<InviteMessage>(ServiceUtil.INVITE_MESSAGE_EXTRA)
-//            val isAccept = intent.getBooleanExtra(ServiceUtil.IS_ACCEPT, false)
-//            sendInviteAnswer(message!!, isAccept)
-//        }
         return START_STICKY
     }
 
@@ -100,6 +95,13 @@ class SignalService : Service() {
             hub.yourLobbyChanged = { lobby ->
                 val intent = Intent(ServiceUtil.LobbyObserver.BROADCAST_ACTION).also {
                     it.putExtra(ServiceUtil.LobbyObserver.LOBBY_MODEL_EXTRA, lobby)
+                }
+                sendBroadcast(intent)
+            }
+            hub.yourLobbyDeleted = { withResults, battleId ->
+                val intent = Intent(ServiceUtil.LobbyDeleted.BROADCAST_ACTION).also {
+                    it.putExtra(ServiceUtil.LobbyDeleted.WITH_RESULTS, withResults)
+                    it.putExtra(ServiceUtil.LobbyDeleted.BATTLE_ID, battleId)
                 }
                 sendBroadcast(intent)
             }
