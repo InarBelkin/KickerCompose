@@ -5,5 +5,5 @@ object Endpoints {
     const val accountApi = "api/users/"
     const val lobbyApi = "api/Lobby/"
     const val lobbyMessagesApi = "/api/LobbyMessages/"
-
+    const val battle = "api/battle/"
 }

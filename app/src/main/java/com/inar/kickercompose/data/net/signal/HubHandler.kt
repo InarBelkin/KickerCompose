@@ -1,22 +1,21 @@
 package com.inar.kickercompose.data.net.signal
 
 import android.content.Context
-import android.os.UserManager
+import android.util.Log
+import com.google.gson.GsonBuilder
 import com.inar.kickercompose.R
-import com.inar.kickercompose.data.models.lobby.InviteRequestDto
-import com.inar.kickercompose.data.models.lobby.LobbyItemModel
+import com.inar.kickercompose.data.models.adapters.LocalDateTimeDeserializer
+import com.inar.kickercompose.data.models.adapters.LocalDateTimeSerializer
+import com.inar.kickercompose.data.models.lobby.item.LobbyItemModel
 import com.inar.kickercompose.data.models.lobby.messages.InviteAnswer
 import com.inar.kickercompose.data.models.lobby.messages.InviteMessage
-import com.inar.kickercompose.data.net.repositories.ILobbyRepository
-import com.inar.kickercompose.data.net.repositories.LobbyRepository
+import com.inar.kickercompose.data.net.repositories.interfaces.ILobbyRepository
 import com.inar.kickercompose.data.viemodels.AccountHandler
 import com.microsoft.signalr.HubConnection
 import com.microsoft.signalr.HubConnectionBuilder
 import dagger.hilt.android.qualifiers.ApplicationContext
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
-import kotlinx.coroutines.rx3.rxObservable
 import kotlinx.coroutines.rx3.rxSingle
+import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -49,8 +48,17 @@ class HubHandler @Inject constructor(
 
 
         hub.on("YourLobbyChanged", { m ->
-            yourLobbyChanged?.invoke(m)
-        }, LobbyItemModel::class.java)
+            Log.d("json", m.toString())
+
+            val gson = GsonBuilder().registerTypeAdapter(LocalDateTime::class.java,
+                LocalDateTimeSerializer())
+                .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
+                .create()
+
+            val rez = gson.fromJson<LobbyItemModel>(m, LobbyItemModel::class.java)
+
+            yourLobbyChanged?.invoke(rez)
+        }, String::class.java)
 
         hub.on("YourLobbyDeleted") {
             yourLobbyDeleted?.invoke()

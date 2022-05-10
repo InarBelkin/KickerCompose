@@ -1,4 +1,4 @@
-package com.inar.kickercompose.data.net.repositories
+package com.inar.kickercompose.data.net.repositories.interfaces
 
 import com.inar.kickercompose.data.models.account.*
 import com.inar.kickercompose.data.models.answers.MessageBase

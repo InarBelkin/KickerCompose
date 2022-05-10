@@ -3,11 +3,10 @@ package com.inar.kickercompose.data.viemodels
 import android.util.Log
 import androidx.lifecycle.*
 import com.inar.kickercompose.data.models.LeaderboardWrapper
-import com.inar.kickercompose.data.models.lobby.LobbyItemModel
 import com.inar.kickercompose.data.models.states.loadstates.LoadedState
 import com.inar.kickercompose.data.models.userdetails.UserDetails
-import com.inar.kickercompose.data.net.repositories.ILobbyRepository
-import com.inar.kickercompose.data.net.repositories.IStatsRepository
+import com.inar.kickercompose.data.net.repositories.interfaces.ILobbyRepository
+import com.inar.kickercompose.data.net.repositories.interfaces.IStatsRepository
 import com.inar.kickercompose.data.net.signal.HubHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

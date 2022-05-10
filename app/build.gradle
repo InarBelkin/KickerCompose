@@ -109,6 +109,8 @@ dependencies {
 
     //JWT
     implementation 'com.auth0.android:jwtdecode:2.0.1'
+    ///picker
+    implementation 'com.chillibits:composenumberpicker:1.1.0'
 
 
 }

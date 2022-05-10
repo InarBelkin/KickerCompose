@@ -16,10 +16,11 @@ import com.auth0.android.jwt.JWT
 import com.inar.kickercompose.data.models.account.*
 import com.inar.kickercompose.data.models.states.MessageState
 import com.inar.kickercompose.data.models.states.MessageStyle
-import com.inar.kickercompose.data.net.repositories.IAccountRepository
+import com.inar.kickercompose.data.net.repositories.interfaces.IAccountRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.first
+import retrofit2.HttpException
 import java.lang.Exception
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -89,6 +90,11 @@ class AccountHandler @Inject constructor(
 
         } catch (e: CancellationException) {
             Log.e(tag, e.message ?: "job was cancelled")
+        } catch (e: HttpException) {
+          val message =   (e.localizedMessage ?: "http error") + "\n" + (e.response()?.errorBody()?.string()
+                ?: "no error body")
+            Log.e(tag, message)
+            _authState.value = AuthState.Error("", e)
         } catch (e: Exception) {
             Log.e(tag, e.message ?: "")
             _authState.value = AuthState.Error("", e)

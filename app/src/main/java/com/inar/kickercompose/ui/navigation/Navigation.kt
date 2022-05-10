@@ -21,6 +21,7 @@ import com.inar.kickercompose.ui.lobby.InviteInLobby
 import com.inar.kickercompose.ui.lobby.LobbyFuns
 import com.inar.kickercompose.ui.lobby.LobbyGuestPage
 import com.inar.kickercompose.ui.lobby.MyLobby
+import com.inar.kickercompose.ui.lobby.one.ShowBattleResults
 import com.inar.kickercompose.ui.userpage.MyPage
 import com.inar.kickercompose.ui.userpage.SettingsPage
 import com.inar.kickercompose.ui.userpage.UserPage
@@ -58,6 +59,13 @@ fun Navigation(navHostController: NavHostController, vm: TestViewModel) {
             LobbyGuestPage(initiatorId = it.arguments?.getString(NavigationItems.GuestLobby.id)!!,
                 vm = vm,
                 navController = navHostController)
+        }
+
+        composable(NavigationItems.BattleResult.route,
+            arguments = listOf(navArgument(NavigationItems.BattleResult.id) {
+                type = NavType.StringType
+            })) {
+            ShowBattleResults(battleId = it.arguments?.getString(NavigationItems.BattleResult.id)!!, navHostController)
         }
 
         composable(NavigationItems.InviteInMyLobby.route,

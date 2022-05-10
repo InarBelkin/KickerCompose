@@ -3,7 +3,7 @@ package com.inar.kickercompose.data.net.repositories
 import com.inar.kickercompose.data.models.account.*
 import com.inar.kickercompose.data.models.answers.MessageBase
 import com.inar.kickercompose.data.net.network.NetworkService
-import com.inar.kickercompose.data.viemodels.AccountHandler
+import com.inar.kickercompose.data.net.repositories.interfaces.IAccountRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 

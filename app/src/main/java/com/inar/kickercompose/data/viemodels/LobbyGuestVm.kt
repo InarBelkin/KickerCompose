@@ -1,10 +1,10 @@
 package com.inar.kickercompose.data.viemodels
 
 import androidx.lifecycle.ViewModel
-import com.inar.kickercompose.data.models.lobby.LobbyItemModel
+import com.inar.kickercompose.data.models.lobby.item.LobbyItemModel
 import com.inar.kickercompose.data.models.states.loadstates.LoadedState
-import com.inar.kickercompose.data.net.repositories.ILobbyMessagesRepository
-import com.inar.kickercompose.data.net.repositories.ILobbyRepository
+import com.inar.kickercompose.data.net.repositories.interfaces.ILobbyMessagesRepository
+import com.inar.kickercompose.data.net.repositories.interfaces.ILobbyRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

@@ -35,3 +35,15 @@ enum class UserStatus(val num: Int, val description: String) {
 
 
 }
+
+enum class BattleStatus(val num: Int, val description: String) {
+    Created(0, "Created"),
+    Started(1, "Started"),
+    Paused(2, "Paused"),
+    EnteringResults(3, "Entering Results"),
+    Ended(4, "Ended");
+
+    companion object {
+        fun fromInt(value: Int) = values().first { it.num == value }
+    }
+}

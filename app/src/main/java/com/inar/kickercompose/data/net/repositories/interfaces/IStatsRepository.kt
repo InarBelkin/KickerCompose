@@ -1,4 +1,4 @@
-package com.inar.kickercompose.data.net.repositories
+package com.inar.kickercompose.data.net.repositories.interfaces
 
 import com.inar.kickercompose.data.models.LeaderboardWrapper
 import com.inar.kickercompose.data.models.states.loadstates.LoadedState

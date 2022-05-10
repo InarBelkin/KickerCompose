@@ -1,6 +1,5 @@
 package com.inar.kickercompose.ui
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -15,17 +14,14 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.inar.kickercompose.R
 import com.inar.kickercompose.data.models.lobby.IsAccepted
-import com.inar.kickercompose.data.models.lobby.LobbyItemModel
+import com.inar.kickercompose.data.models.lobby.item.LobbyItemModel
 import com.inar.kickercompose.data.models.lobby.LobbyUserShortInfo
 import com.inar.kickercompose.data.models.states.loadstates.BottomLoadOverlay
 import com.inar.kickercompose.data.models.states.loadstates.LoadedState
@@ -33,7 +29,6 @@ import com.inar.kickercompose.data.viemodels.TestViewModel
 import com.inar.kickercompose.ui.lobby.CreateLobbyAlert
 import com.inar.kickercompose.ui.lobby.LobbyFuns
 import com.inar.kickercompose.ui.lobby.toMyBattle
-import kotlinx.coroutines.launch
 
 @Composable
 fun Lobby(vm: TestViewModel, navController: NavHostController) {

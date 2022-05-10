@@ -19,4 +19,6 @@ interface StatsApi {
     @GET("api/stats/me")
     suspend fun getMe(@Header("Authorization") authHeader: String): UserDetails
 
+
+
 }

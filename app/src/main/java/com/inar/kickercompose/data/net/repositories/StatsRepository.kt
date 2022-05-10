@@ -1,13 +1,12 @@
 package com.inar.kickercompose.data.net.repositories
 
-import android.util.Log
 import com.inar.kickercompose.data.models.LeaderboardWrapper
 import com.inar.kickercompose.data.models.states.loadstates.LoadedState
 import com.inar.kickercompose.data.models.states.loadstates.loadWrapper
 import com.inar.kickercompose.data.models.userdetails.UserDetails
 import com.inar.kickercompose.data.net.network.NetworkService
+import com.inar.kickercompose.data.net.repositories.interfaces.IStatsRepository
 import com.inar.kickercompose.data.viemodels.AccountHandler
-import java.lang.Exception
 import javax.inject.Inject
 import javax.inject.Singleton
 

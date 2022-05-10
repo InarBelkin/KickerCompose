@@ -5,7 +5,7 @@ import android.content.Context
 import android.util.Log
 import androidx.navigation.NavHostController
 import com.inar.kickercompose.data.models.lobby.IsAccepted
-import com.inar.kickercompose.data.models.lobby.LobbyItemModel
+import com.inar.kickercompose.data.models.lobby.item.LobbyItemModel
 import com.inar.kickercompose.data.models.lobby.messages.InviteMessage
 import com.inar.kickercompose.data.viemodels.TestViewModel
 import com.inar.kickercompose.other.strangeNavigate
@@ -59,10 +59,10 @@ object LobbyFuns {
         context: Context,
     ) {
         try {
-            val message = vm.battle.startBattle(isTwoPlayers)
+            val message = vm.battle.createBattle(isTwoPlayers)
             if (message.success)
                 navController.strangeNavigate(NavigationItems.MyLobby.route)
-            else showAlert("message", context)
+            else showAlert(message.message, context)
         } catch (e: Exception) {
             Log.e(LOBBY_TAG, e.message ?: "")
             showAlert(e.localizedMessage ?: "something went wrong", context)

@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.inar.kickercompose.data.models.lobby.IsAccepted
-import com.inar.kickercompose.data.models.lobby.LobbyItemModel
+import com.inar.kickercompose.data.models.lobby.item.LobbyItemModel
 import com.inar.kickercompose.data.models.lobby.LobbyUserShortInfo
 import com.inar.kickercompose.data.models.lobby.messages.InviteAnswer
 import com.inar.kickercompose.data.models.states.loadstates.LoadScreen

@@ -23,6 +23,12 @@ sealed class NavigationItems(
         const val id = "id"
     }
 
+    object BattleResult :
+        NavigationItems("battle_result/{id}", R.drawable.ic_baseline_person_24, "BattleResult") {
+        const val clearRoute = "battle_result/"
+        const val id = "id"
+    }
+
     object SettingsPage : NavigationItems("settings", R.drawable.ic_baseline_person_24, "Settings")
     object InviteInMyLobby :
         NavigationItems("invite_lobby/{side}/{position}",

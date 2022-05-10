@@ -1,14 +1,22 @@
-package com.inar.kickercompose.data.models.lobby
+package com.inar.kickercompose.data.models.lobby.item
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.inar.kickercompose.data.models.lobby.LobbyUserShortInfo
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 import kotlin.collections.ArrayList
 
 class LobbyItemModel() : Parcelable {
-    var dateStart: LocalDateTime? = null
+    val lastTimeStamp: LobbyTimeStamp?
+        get() = timeStamps.lastOrNull()
+
+    //TODO create batLtle must add first element here
+    var timeStamps: ArrayList<LobbyTimeStamp> = arrayListOf()
+    var result: ResultDto = ResultDto()
+
+
+    // var dateStart: LocalDateTime? = null
     var message: String = ""
     var initiator: LobbyUserShortInfo = LobbyUserShortInfo()
 
@@ -16,9 +24,8 @@ class LobbyItemModel() : Parcelable {
     var sideB: List<LobbyUserShortInfo> = arrayListOf()
 
     constructor(parcel: Parcel) : this() {
-        val dateStartString = parcel.readString()
-        dateStart = (if (dateStartString != null) LocalDateTime.parse(dateStartString) else null)
-
+        timeStamps = parcel.createTypedArrayList(LobbyTimeStamp)!!
+        result = parcel.readParcelable(ResultDto::class.java.classLoader)!!
         message = parcel.readString()!!
         initiator = parcel.readParcelable(LobbyUserShortInfo::class.java.classLoader)!!
         sideA = parcel.createTypedArrayList(LobbyUserShortInfo)!!
@@ -26,7 +33,8 @@ class LobbyItemModel() : Parcelable {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(dateStart?.format(DateTimeFormatter.ISO_DATE_TIME))
+        parcel.writeTypedList(timeStamps)
+        parcel.writeParcelable(result, flags)
         parcel.writeString(message)
         parcel.writeParcelable(initiator, flags)
         parcel.writeTypedList(sideA)

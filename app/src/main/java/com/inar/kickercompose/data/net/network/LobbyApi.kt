@@ -1,8 +1,7 @@
 package com.inar.kickercompose.data.net.network
 
 import com.inar.kickercompose.data.models.answers.MessageBase
-import com.inar.kickercompose.data.models.lobby.LobbyItemModel
-import com.inar.kickercompose.ui.navigation.NavigationItems
+import com.inar.kickercompose.data.models.lobby.item.LobbyItemModel
 import retrofit2.http.*
 
 interface LobbyApi {
@@ -21,6 +20,6 @@ interface LobbyApi {
     @PUT("api/Lobby")
     suspend fun updateLobby(@Body dto: LobbyItemModel): MessageBase
 
-    @DELETE("api/Lobby/{id}")
+    @DELETE("api/Lobby/deleteOne/{id}")
     suspend fun deleteLobby(@Path(value = "id") userId: String): MessageBase
 }

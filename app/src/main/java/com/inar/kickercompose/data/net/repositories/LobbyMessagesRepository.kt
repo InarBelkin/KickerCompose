@@ -1,11 +1,13 @@
 package com.inar.kickercompose.data.net.repositories
 
+import com.inar.kickercompose.data.models.answers.BattleAnswerMessage
 import com.inar.kickercompose.data.models.answers.MessageBase
+import com.inar.kickercompose.data.models.lobby.item.LobbyItemModel
 import com.inar.kickercompose.data.models.lobby.messages.InviteAnswer
 import com.inar.kickercompose.data.models.lobby.messages.InviteMessage
 import com.inar.kickercompose.data.models.lobby.messages.LeaveBattleDto
 import com.inar.kickercompose.data.net.network.NetworkService
-import retrofit2.http.Body
+import com.inar.kickercompose.data.net.repositories.interfaces.ILobbyMessagesRepository
 import javax.inject.Inject
 
 class LobbyMessagesRepository @Inject constructor(private val networkService: NetworkService) :
@@ -22,7 +24,11 @@ class LobbyMessagesRepository @Inject constructor(private val networkService: Ne
         networkService.lobbyMessages.answerToInvite(dto)
     }
 
-    override suspend fun leaveBattle(@Body dto: LeaveBattleDto): MessageBase {
+    override suspend fun leaveBattle(dto: LeaveBattleDto): MessageBase {
         return networkService.lobbyMessages.leaveBattle(dto)
+    }
+
+    override suspend fun endBattle(dto: LobbyItemModel): BattleAnswerMessage {
+        return networkService.lobbyMessages.endBattle(dto)
     }
 }

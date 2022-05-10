@@ -1,6 +1,8 @@
 package com.inar.kickercompose.data.net.network
 
+import com.inar.kickercompose.data.models.answers.BattleAnswerMessage
 import com.inar.kickercompose.data.models.answers.MessageBase
+import com.inar.kickercompose.data.models.lobby.item.LobbyItemModel
 import com.inar.kickercompose.data.models.lobby.messages.InviteAnswer
 import com.inar.kickercompose.data.models.lobby.messages.InviteMessage
 import com.inar.kickercompose.data.models.lobby.messages.LeaveBattleDto
@@ -21,4 +23,7 @@ interface LobbyMessagesApi {
 
     @POST(Endpoints.lobbyMessagesApi + "leave")
     suspend fun leaveBattle(@Body dto: LeaveBattleDto): MessageBase
+
+    @POST(Endpoints.lobbyMessagesApi + "end")
+    suspend fun endBattle(@Body dto: LobbyItemModel): BattleAnswerMessage
 }
