@@ -52,14 +52,14 @@ fun InviteToDuelAlert(
             buttons = {
                 Row(modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center) {
-                    Button(onClick = {
+                    Button(modifier = Modifier.fillMaxWidth(0.5f), onClick = {
                         scope.launch {
                             sendInviteToDuel()
                         }
                     }) {
                         Text(text = "Send")
                     }
-                    Button(onClick = onDismiss) {
+                    Button(modifier = Modifier.fillMaxWidth(), onClick = onDismiss) {
                         Text(text = "Cancel")
                     }
                 }

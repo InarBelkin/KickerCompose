@@ -10,3 +10,7 @@ val Purple700 = Color(0xFF3700B3)
 val Teal200 = Color(0xFF03DAC5)
 
 val LightOrange = Color(0xFFFF8300)
+
+val Gold = Color(0xFFFFDF00)
+val Silver = Color(0xFF9C9C9C)
+val Bronze = Color(0xFFDE8B3F)

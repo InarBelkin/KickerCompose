@@ -4,5 +4,6 @@ class StatsOneVsOne {
     var elo: Int = 0
     var battlesCount: Int = 0
     var winsCount: Int = 0
+    var goalsCount: Int = 0
 
 }

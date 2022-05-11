@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.inar.kickercompose.R
@@ -22,6 +23,7 @@ import com.inar.kickercompose.data.models.states.loadstates.BottomLoadOverlay
 import com.inar.kickercompose.data.viemodels.TestViewModel
 import com.inar.kickercompose.other.strangeNavigate
 import com.inar.kickercompose.ui.lobby.one.MyLobbyScreens
+import com.inar.kickercompose.ui.lobby.one.WriteTextAlert
 import com.inar.kickercompose.ui.navigation.NavigationItems
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -53,7 +55,7 @@ fun MyLobby(vm: TestViewModel, navController: NavHostController) {
             else navController.strangeNavigate(NavigationItems.BattleResult.clearRoute + m)
         }
         onDispose {
-        //    vm.battle.disposeObserveDeleted(context)
+            //    vm.battle.disposeObserveDeleted(context)
         }
     }
 
@@ -87,11 +89,20 @@ fun LobbyIAmInitiator(lobby: LobbyItemModel, vm: TestViewModel, navController: N
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
+    var isMessageEditorOpen by remember { mutableStateOf(false) }
+
     Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(text = "Initiator - You, ${lobby.initiator.name}", softWrap = true)
-        TextField(value = lobby.message, onValueChange = {
 
-        })
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .padding(7.dp)
+            .clickable {
+                isMessageEditorOpen = true
+            }) {
+            Text(text = lobby.message, softWrap = true, fontStyle = FontStyle.Italic)
+        }
+
         Text(text = "Side A")
         for (position in 0 until lobby.sideA.count()) {
             FuckingUserInMyLobby(lobby.sideA[position]) {
@@ -118,6 +129,10 @@ fun LobbyIAmInitiator(lobby: LobbyItemModel, vm: TestViewModel, navController: N
         }
 
 
+    }
+
+    WriteTextAlert(isOpen = isMessageEditorOpen, text = lobby.message, vm = vm) {
+        isMessageEditorOpen = false
     }
 }
 
@@ -173,9 +188,7 @@ fun FuckingUserInMyLobby(
                 Text(text = "Role = ${Role.fromInt(user.role).description}")
                 Text(text = "Status = ${IsAccepted.fromInt(user.accepted).description}")
             }
-
         }
-
 
     }
 }

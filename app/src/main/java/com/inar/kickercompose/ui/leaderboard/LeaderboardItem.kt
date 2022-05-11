@@ -27,6 +27,9 @@ import com.inar.kickercompose.data.models.lobby.BattleStatus
 import com.inar.kickercompose.data.models.lobby.UserStatus
 import com.inar.kickercompose.other.strangeNavigate
 import com.inar.kickercompose.ui.navigation.NavigationItems
+import com.inar.kickercompose.ui.theme.Bronze
+import com.inar.kickercompose.ui.theme.Gold
+import com.inar.kickercompose.ui.theme.Silver
 
 @Composable
 @Preview
@@ -41,6 +44,15 @@ fun LeaderboardItemPreview() {
 @Composable
 fun LeaderboardItem(user: UserLeaderboard, onClick: () -> Unit = {}) {
     val cardHeight = 60.dp
+
+    var color = when {
+        user.isMe -> MaterialTheme.colors.secondary
+        user.stPlace == 1 -> Gold
+        user.stPlace == 2 -> Silver
+        user.stPlace == 3 -> Bronze
+
+        else -> MaterialTheme.colors.primary
+    }
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -49,7 +61,7 @@ fun LeaderboardItem(user: UserLeaderboard, onClick: () -> Unit = {}) {
             .clickable {
                 onClick.invoke()
             },
-        border = BorderStroke(2.dp, MaterialTheme.colors.primary),
+        border = BorderStroke(2.dp, color),
         shape = RoundedCornerShape(15.dp),
     ) {
 
@@ -119,14 +131,14 @@ fun OnlineIcon(userStatus: Int) {
         UserStatus.Online.num -> {
             Canvas(modifier = Modifier.size(10.dp), onDraw = {
                 drawCircle(color = Color.Gray)
-                drawCircle(color = Color.Green, radius = 9.5f,)
+                drawCircle(color = Color.Green, radius = 9.5f)
             })
         }
         UserStatus.InBattle.num -> {
             val blueColor = MaterialTheme.colors.primaryVariant
             Canvas(modifier = Modifier.size(10.dp), onDraw = {
                 drawCircle(color = Color.Gray)
-                drawCircle(color = blueColor, radius = 9.5f,)
+                drawCircle(color = blueColor, radius = 9.5f)
             })
         }
     }

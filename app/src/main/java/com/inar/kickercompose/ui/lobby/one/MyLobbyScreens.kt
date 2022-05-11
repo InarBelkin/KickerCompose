@@ -27,6 +27,7 @@ import com.inar.kickercompose.other.strangeNavigate
 import com.inar.kickercompose.ui.lobby.LobbyFuns
 import com.inar.kickercompose.ui.navigation.NavigationItems
 import com.inar.kickercompose.ui.navigation.showAlert
+import com.inar.kickercompose.ui.theme.utils.BorderedButton
 import com.inar.kickercompose.ui.userpage.StrokePseudoButton
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -47,8 +48,7 @@ object MyLobbyScreens {
                 val rez = vm.battle.checkStartBattle()
                 if (!rez.success) {
                     isStartBattleWinOpen = true
-                }
-                else
+                } else
                     vm.battle.startBattle()
             }
         }) {
@@ -63,9 +63,14 @@ object MyLobbyScreens {
             Text(text = "Stop!")
         }
 
+        BorderedButton(text = "Stop!") {
+
+        }
+
         StartBattleAlert(isOpen = isStartBattleWinOpen, vm = vm) {
             isStartBattleWinOpen = false
         }
+
     }
 
 

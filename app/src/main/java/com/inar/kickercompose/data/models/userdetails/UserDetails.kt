@@ -33,16 +33,23 @@ class UserDetails {
                 "ELO" to it.elo.toString(),
                 "Wins count" to it.winsCount.toString(),
                 "Defeats count" to it.battlesCount.minus(it.winsCount).toString(),
-                "Count of goals" to ""
+                "Count of goals" to it.goalsCount.toString(),
             )
         }
     }
 
     val statsTwoVsTwoList: List<Pair<String, String>> by lazy {
         statsTwoVsTwo.let {
-            listOf("Battles count 2x2" to it.battlesCountInAttack.plus(it.battlesCountInDefense)
-                .toString(),
-                "Elo" to it.elo.toString())
+            listOf(
+                "Battles count 2x2" to it.battlesCountInAttack.plus(it.battlesCountInDefense)
+                    .toString(),
+                "Elo" to it.elo.toString(),
+                "Wins count" to it.winsCountInAttack.plus(it.winsCountInDefense).toString(),
+                "Defeats Count" to it.battlesCountInAttack.plus(it.battlesCountInDefense)
+                    .minus(it.winsCountInAttack).minus(it.winsCountInDefense).toString(),
+                "Count of wins in attack" to it.winsCountInAttack.toString(),
+                "Count of wins in Defense" to it.winsCountInDefense.toString(),
+            )
         }
     }
 

@@ -93,6 +93,14 @@ class BattlePart @Inject constructor(
 
     }
 
+    suspend fun changeMessageBattle(newMessage: String) = messageBaseWrapper {
+        val l = myLobbyLd.value!!.value!!
+
+        l.message = newMessage
+
+        updateBattle(l)
+    }
+
 
     suspend fun updateBattle(lobbyModel: LobbyItemModel): MessageBase =
         lobby.updateLobby(lobbyModel)

@@ -24,6 +24,7 @@ class StatsRepository @Inject constructor(
 
     override suspend fun getLeaderboard(): LoadedState<LeaderboardWrapper> =
         loadWrapper {
+
             val lwrapper = networkService.stats.getLeaderboard()
             lwrapper.data = lwrapper.data.sortedByDescending {
                 it.elo
@@ -31,6 +32,10 @@ class StatsRepository @Inject constructor(
             for (i in 0 until lwrapper.data.count()) {
                 lwrapper.data[i].stPlace = i + 1
             }
+            val claims = accountHandler.getUserClaims()
+            if (claims != null)
+                lwrapper.data.filter { it.id == claims.id }.forEach { it.isMe = true }
+
             lwrapper
         }
 
