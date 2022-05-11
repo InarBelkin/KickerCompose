@@ -7,13 +7,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.inar.kickercompose.data.models.states.loadstates.BottomLoadOverlay
@@ -27,10 +25,10 @@ import kotlinx.coroutines.launch
 fun Leaderboard(vm: TestViewModel, navController: NavHostController) {
     val scope = rememberCoroutineScope()
     val users by vm.leaderboardLd.observeAsState()
+    var textSearch by remember { mutableStateOf("") }
     LaunchedEffect(Unit) {
         vm.loadLeaderboard()
     }
-
 
     Scaffold(topBar = {
         Card(
@@ -41,22 +39,24 @@ fun Leaderboard(vm: TestViewModel, navController: NavHostController) {
             Box(contentAlignment = Alignment.Center) {
                 TextField(modifier = Modifier
                     .fillMaxWidth(),
-                    value = "",
-                    onValueChange = {},
+                    value = textSearch,
+                    onValueChange = { textSearch = it },
                     placeholder = { Text("Search") })
             }
         }
     }) {
         Box(modifier = Modifier.padding(7.dp)) {
             LazyColumn(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxSize()) {
-                itemsIndexed(users!!.value.data) { _, item ->
+                itemsIndexed(users!!.value.data.filter {
+                    Regex(textSearch,
+                        RegexOption.IGNORE_CASE).containsMatchIn(it.name)
+                }) { _, item ->
                     LeaderboardItem(user = item) {
                         navController.strangeNavigate(NavigationItems.UserPage.clearRoute + item.id)
                     }
                 }
             }
         }
-
     }
 
     BottomLoadOverlay(users!!)

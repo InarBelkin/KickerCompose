@@ -57,8 +57,6 @@ fun UserPageEmbedded(
                 Text(text = "My page", fontSize = 18.sp)
                 LeaderboardItem(user = user!!.value.toUserLeaderboard())
                 StatsCardSelector(user = user!!.value)
-                Text(text = user!!.value.isMe.toString())
-
             }
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
                 StrokePseudoButton(text = "Settings") {
@@ -67,7 +65,6 @@ fun UserPageEmbedded(
             }
 
         } else {
-
             Column(modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = "User page", fontSize = 18.sp)
@@ -76,20 +73,18 @@ fun UserPageEmbedded(
                     isInviteDialogOpen = true
                 }
                 StatsCardSelector(user = user!!.value)
-                Text(text = user!!.value.isMe.toString())
             }
-
         }
     }
 
     user?.value?.let {
         InviteToDuelAlert(
-        invitedId = it.id,
-        isOpen = isInviteDialogOpen,
-        vm = vm,
-        navController = navHostController) {
-        isInviteDialogOpen = false
-    }
+            invitedId = it.id,
+            isOpen = isInviteDialogOpen,
+            vm = vm,
+            navController = navHostController) {
+            isInviteDialogOpen = false
+        }
     }
 
     BottomLoadOverlay(user!!)

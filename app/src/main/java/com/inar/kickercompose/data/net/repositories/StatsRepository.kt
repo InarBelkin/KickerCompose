@@ -23,7 +23,16 @@ class StatsRepository @Inject constructor(
         }
 
     override suspend fun getLeaderboard(): LoadedState<LeaderboardWrapper> =
-        loadWrapper { networkService.stats.getLeaderboard() }
+        loadWrapper {
+            val lwrapper = networkService.stats.getLeaderboard()
+            lwrapper.data = lwrapper.data.sortedByDescending {
+                it.elo
+            }.toList()
+            for (i in 0 until lwrapper.data.count()) {
+                lwrapper.data[i].stPlace = i + 1
+            }
+            lwrapper
+        }
 
     suspend fun getMe(): LoadedState<UserDetails> = loadWrapper {
         return loadWrapper { networkService.stats.getMe("Bearer " + accountHandler.getAccessToken()) }

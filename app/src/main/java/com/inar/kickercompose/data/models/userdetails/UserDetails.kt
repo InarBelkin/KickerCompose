@@ -7,6 +7,7 @@ class UserDetails {
     var name: String = "";
     var imgSource: String = ""
     var isMe = false
+    var status: Int = 0
 
     var statsOneVsOne = StatsOneVsOne()
     var statsTwoVsTwo = StatsTwoVsTwo()
@@ -19,6 +20,7 @@ class UserDetails {
             statsOneVsOne.battlesCount + statsTwoVsTwo.battlesCountInAttack + statsTwoVsTwo.battlesCountInDefense
         winsCount =
             statsOneVsOne.winsCount + statsTwoVsTwo.winsCountInAttack + statsTwoVsTwo.winsCountInDefense
+        status = this@UserDetails.status
     }
 
     val statsOneVsOneList by lazy {
