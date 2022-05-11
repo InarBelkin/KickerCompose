@@ -32,7 +32,7 @@ fun CreateLobbyAlert(
                 Box(modifier = Modifier
                     .padding(vertical = 10.dp)
                     .fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    Text(text = "Start battle", fontWeight = FontWeight.Bold)
+                    Text(text = "Create lobby", fontWeight = FontWeight.Bold)
                 }
             },
             text = {

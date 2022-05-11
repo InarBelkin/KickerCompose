@@ -1,5 +1,6 @@
 package com.inar.kickercompose.data.viemodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.inar.kickercompose.data.models.lobby.item.LobbyItemModel
 import com.inar.kickercompose.data.models.states.loadstates.LoadedState
@@ -15,6 +16,8 @@ class BattleEndVm @Inject constructor(private val battle: IBattleRepository) : V
 
     suspend fun reloadBattleResult(id: String) {
         delegateBattle.reLoad { battle.getBattle(id) }
+        val res = battleResultLd.value
+        Log.d("battle", res?.value?.message ?: "adsf")
     }
 
 }

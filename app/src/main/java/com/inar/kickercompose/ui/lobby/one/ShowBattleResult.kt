@@ -1,5 +1,6 @@
 package com.inar.kickercompose.ui.lobby.one
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.inar.kickercompose.data.models.states.loadstates.BottomLoadOverlay
 import com.inar.kickercompose.data.viemodels.BattleEndVm
 import com.inar.kickercompose.data.viemodels.TestViewModel
 import com.inar.kickercompose.other.strangeNavigate
@@ -23,11 +25,13 @@ import com.inar.kickercompose.ui.navigation.NavigationItems
 
 @Composable
 fun ShowBattleResults(battleId: String, navHostController: NavHostController) {
+    val TAG = "ShowBattleResults"
     val bvm: BattleEndVm = hiltViewModel();
     val battle by bvm.battleResultLd.observeAsState();
 
     LaunchedEffect(battleId) {
-        bvm.reloadBattleResult(battleId);
+        bvm.reloadBattleResult(battleId)
+        Log.d(TAG,"get it!")
     }
 
     Box(modifier = Modifier.padding(7.dp)) {
@@ -65,5 +69,5 @@ fun ShowBattleResults(battleId: String, navHostController: NavHostController) {
 
     }
 
-
+    BottomLoadOverlay(battle!!)
 }

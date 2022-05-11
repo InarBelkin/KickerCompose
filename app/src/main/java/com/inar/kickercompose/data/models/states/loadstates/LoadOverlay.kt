@@ -16,7 +16,7 @@ fun <T> BottomLoadOverlay(loadedContent: LoadedState<T>) = when (loadedContent) 
     }
     is LoadedState.Error -> {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-            Text(text = "Error: ${loadedContent.error.message}")
+            Text(text = "Error: ${loadedContent.error.message ?: "not speciefed"}")
         }
     }
     else -> {}

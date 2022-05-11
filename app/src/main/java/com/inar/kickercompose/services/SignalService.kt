@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
-import androidx.compose.ui.res.integerArrayResource
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.inar.kickercompose.MainActivity
@@ -14,11 +13,9 @@ import com.inar.kickercompose.R
 import com.inar.kickercompose.data.models.lobby.messages.InviteAnswer
 import com.inar.kickercompose.data.models.lobby.messages.InviteMessage
 import com.inar.kickercompose.data.net.signal.HubHandler
+import com.microsoft.signalr.HubConnectionState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -81,7 +78,8 @@ class SignalService : Service() {
 
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startSignalR()
+        //startSignalR()
+        if (!reconnectWorks) scope.launch { rekonnecter() }
         return START_STICKY
     }
 
@@ -113,7 +111,10 @@ class SignalService : Service() {
 
     private fun showNotificationInvite(message: InviteMessage) {
         scope.launch {
-            message.invitedId = hub.account.getUserClaims()?.id ?: ""
+            val claims = hub.account.getUserClaims()
+            if (message.senderId == (claims?.id ?: "")) return@launch
+
+            message.invitedId = claims?.id ?: ""
             val intent = Intent(this@SignalService, MainActivity::class.java).also {
                 it.putExtra(ServiceUtil.OPEN_LOBBY_EXTRA, true)
                 it.putExtra(ServiceUtil.InviteAnswer.INVITE_MESSAGE_EXTRA, message)
@@ -183,4 +184,13 @@ class SignalService : Service() {
 
     override fun onBind(p0: Intent?): IBinder? = null
 
+    private var reconnectWorks: Boolean = false
+    private suspend fun rekonnecter() {
+        reconnectWorks = true
+
+        while (true) {
+            if (!hub.isHubInitialized() || hub.hub.connectionState == HubConnectionState.DISCONNECTED) startSignalR();
+            delay(5000)
+        }
+    }
 }

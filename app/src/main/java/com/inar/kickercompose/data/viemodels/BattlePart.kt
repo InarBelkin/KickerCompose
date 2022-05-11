@@ -143,6 +143,18 @@ class BattlePart @Inject constructor(
             return MessageBase(true, "Success!")
         }
 
+    suspend fun checkStartBattle(): MessageBase {
+        val l = myLobbyLd.value?.value ?: return MessageBase(false, "lobby doen't exists");
+
+        val list = listOf(l.sideA, l.sideB).flatten()
+        if (list.all { it.id != null && it.accepted == IsAccepted.Accepted.a }) return MessageBase(
+            true,
+            "ok, let's start")
+
+        return MessageBase(false,
+            "Your lobby is not full! You can start battle, but results will not be included in statistics")
+    }
+
     suspend fun startBattle(): MessageBase = messageBaseWrapper {
         val l = myLobbyLd.value?.value!!;
         l.timeStamps.add(LobbyTimeStamp(BattleStatus.Started.num,

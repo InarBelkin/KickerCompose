@@ -38,15 +38,18 @@ object MyLobbyScreens {
         vm: TestViewModel,
         navController: NavHostController,
     ) {
+        var isStartBattleWinOpen by remember { mutableStateOf(false) }
         val context = LocalContext.current
         val scope = rememberCoroutineScope()
 
         Button(modifier = Modifier.fillMaxWidth(), onClick = {
             scope.launch {
-                val rez = vm.battle.startBattle()
+                val rez = vm.battle.checkStartBattle()
                 if (!rez.success) {
-                    showAlert(rez.message, context)
+                    isStartBattleWinOpen = true
                 }
+                else
+                    vm.battle.startBattle()
             }
         }) {
             Text(text = "Start!")   //maybe add animation loading while lobby is updating on server?
@@ -59,7 +62,12 @@ object MyLobbyScreens {
         }) {
             Text(text = "Stop!")
         }
+
+        StartBattleAlert(isOpen = isStartBattleWinOpen, vm = vm) {
+            isStartBattleWinOpen = false
+        }
     }
+
 
     @Composable
     fun Started(

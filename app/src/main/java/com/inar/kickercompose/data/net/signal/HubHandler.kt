@@ -27,6 +27,8 @@ class HubHandler @Inject constructor(
 ) {
     lateinit var hub: HubConnection
 
+    fun isHubInitialized(): Boolean = this::hub.isInitialized
+
     fun start() { //TODO: try to change callback to events(or how does it called here?)
         val url = appContext.getString(R.string.baseUrl) + "invitation"
 
@@ -67,7 +69,6 @@ class HubHandler @Inject constructor(
 
         hub.onClosed {
             Log.d(TAG, "hub losted connection")
-
             hub = HubConnectionBuilder.create(url)
                 .withAccessTokenProvider(
                     rxSingle {
