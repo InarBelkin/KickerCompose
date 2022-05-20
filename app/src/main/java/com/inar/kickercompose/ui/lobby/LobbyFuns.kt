@@ -135,7 +135,7 @@ object LobbyFuns {
 
                     vm.battle.sendInviteAnswerFromGuest(message!!, true)
 
-                    navController.strangeNavigate(NavigationItems.Lobby.route)
+                    navController.strangeNavigate(NavigationItems.MyLobby.route)
                 }
             } catch (e: Exception) {
                 Log.e(LOBBY_TAG, e.message ?: "")

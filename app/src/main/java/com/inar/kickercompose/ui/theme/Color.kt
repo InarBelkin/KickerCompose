@@ -11,6 +11,11 @@ val Teal200 = Color(0xFF03DAC5)
 
 val LightOrange = Color(0xFFFF8300)
 
+
+object KickerColors {
+    val dangerous = Color(0xFFF44336)
+}
+
 val Gold = Color(0xFFFFDF00)
 val Silver = Color(0xFF9C9C9C)
 val Bronze = Color(0xFFDE8B3F)

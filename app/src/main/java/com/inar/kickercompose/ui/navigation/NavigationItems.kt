@@ -11,7 +11,7 @@ sealed class NavigationItems(
         NavigationItems("leaderboard", R.drawable.ic_baseline_people_24, "Leaderboard")
 
     object Lobby :
-        NavigationItems("lobby", R.drawable.ic_baseline_people_24, "Lobby")
+        NavigationItems("lobby", R.drawable.ic_baseline_sports_soccer_24, "Lobby")
 
     object MyLobby : NavigationItems("my_lobby",
         R.drawable.ic_baseline_person_24,
@@ -40,7 +40,7 @@ sealed class NavigationItems(
     }
 
     object MyPage :
-        NavigationItems("my_page", R.drawable.ic_baseline_people_24, "Me")
+        NavigationItems("my_page", R.drawable.ic_baseline_person_24, "Me")
 
     object UserPage :
         NavigationItems(

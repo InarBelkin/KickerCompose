@@ -19,6 +19,8 @@ import com.inar.kickercompose.data.viemodels.TestViewModel
 import com.inar.kickercompose.other.strangeNavigate
 import com.inar.kickercompose.ui.lobby.one.MyLobbyScreens
 import com.inar.kickercompose.ui.navigation.NavigationItems
+import com.inar.kickercompose.ui.theme.KickerColors
+import com.inar.kickercompose.ui.theme.utils.BorderedButton
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -80,13 +82,19 @@ object MyLobbyInvitedScreens {
     ) {
         val scope = rememberCoroutineScope()
 
-        Button(onClick = {
+        BorderedButton(text = "Leave this battle!", color = KickerColors.dangerous, isLongPress = true) {
             scope.launch {
                 LobbyFuns.leaveBattle(lobby.initiator.id!!, vm, navController);
             }
-        }) {
-            Text(text = "Leave this battle!")
         }
+
+//        Button(onClick = {
+//            scope.launch {
+//                LobbyFuns.leaveBattle(lobby.initiator.id!!, vm, navController);
+//            }
+//        }) {
+//            Text(text = "Leave this battle!")
+//        }
     }
 
     @Composable
@@ -109,13 +117,20 @@ object MyLobbyInvitedScreens {
             horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text = String.format("%.1f", time), fontSize = 40.sp)
 
-            Button(onClick = {
+
+            BorderedButton(text = "Leave this battle!", color = KickerColors.dangerous, isLongPress = true) {
                 scope.launch {
                     LobbyFuns.leaveBattle(lobby.initiator.id!!, vm, navController);
                 }
-            }) {
-                Text(text = "Leave this battle!")
             }
+
+//            Button(onClick = {
+//                scope.launch {
+//                    LobbyFuns.leaveBattle(lobby.initiator.id!!, vm, navController);
+//                }
+//            }) {
+//                Text(text = "Leave this battle!")
+//            }
         }
     }
 
@@ -128,13 +143,19 @@ object MyLobbyInvitedScreens {
         val scope = rememberCoroutineScope()
         Text(text = String.format("%.1f", lobby.lastTimeStamp?.battleTime ?: 0),
             fontSize = 40.sp)
-        Button(onClick = {
+
+        BorderedButton(text = "Leave this battle!", color = KickerColors.dangerous, isLongPress = true) {
             scope.launch {
                 LobbyFuns.leaveBattle(lobby.initiator.id!!, vm, navController);
             }
-        }) {
-            Text(text = "Leave this battle!")
         }
+//        Button(onClick = {
+//            scope.launch {
+//                LobbyFuns.leaveBattle(lobby.initiator.id!!, vm, navController);
+//            }
+//        }) {
+//            Text(text = "Leave this battle!")
+//        }
     }
 
     @Composable
@@ -146,13 +167,19 @@ object MyLobbyInvitedScreens {
         val scope = rememberCoroutineScope()
         Text(text = String.format("%.1f", lobby.lastTimeStamp?.battleTime ?: 0),
             fontSize = 40.sp)
-        Button(onClick = {
+
+        BorderedButton(text = "Leave this battle!", color = KickerColors.dangerous, isLongPress = true) {
             scope.launch {
                 LobbyFuns.leaveBattle(lobby.initiator.id!!, vm, navController);
             }
-        }) {
-            Text(text = "Leave this battle!")
         }
+//        Button(onClick = {
+//            scope.launch {
+//                LobbyFuns.leaveBattle(lobby.initiator.id!!, vm, navController);
+//            }
+//        }) {
+//            Text(text = "Leave this battle!")
+//        }
     }
 
     @Composable

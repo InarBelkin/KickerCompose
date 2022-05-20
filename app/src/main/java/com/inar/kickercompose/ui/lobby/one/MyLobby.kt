@@ -13,8 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.inar.kickercompose.R
 import com.inar.kickercompose.data.models.lobby.*
@@ -39,8 +41,6 @@ fun MyLobby(vm: TestViewModel, navController: NavHostController) {
     LaunchedEffect(Unit) {
 
         vm.battle.loadMyLobby()
-
-
         try {
             if (mylobby!!.value != null && mylobby!!.value!!.initiator.id == vm.account.getUserClaims()!!.id) {
                 iAmInitiator = true
@@ -54,11 +54,11 @@ fun MyLobby(vm: TestViewModel, navController: NavHostController) {
             if (!i) navController.strangeNavigate(NavigationItems.Lobby.route)
             else navController.strangeNavigate(NavigationItems.BattleResult.clearRoute + m)
         }
+        vm.battle.observeLobbyChanges(context)
         onDispose {
             //    vm.battle.disposeObserveDeleted(context)
         }
     }
-
 
 
     Box(modifier = Modifier
@@ -106,13 +106,15 @@ fun LobbyIAmInitiator(lobby: LobbyItemModel, vm: TestViewModel, navController: N
         Text(text = "Side A")
         for (position in 0 until lobby.sideA.count()) {
             FuckingUserInMyLobby(lobby.sideA[position]) {
-                openInviteWin(navController, 0, position)
+                if (lobby.lastTimeStamp == null || lobby.lastTimeStamp?.battleState == BattleStatus.Created.num)
+                    openInviteWin(navController, 0, position)
             }
         }
         Text(text = "Side B")
         for (position in 0 until lobby.sideB.count()) {
             FuckingUserInMyLobby(lobby.sideB[position]) {
-                openInviteWin(navController, 1, position)
+                if (lobby.lastTimeStamp == null || lobby.lastTimeStamp?.battleState == BattleStatus.Created.num)
+                    openInviteWin(navController, 1, position)
             }
         }
 
@@ -141,6 +143,7 @@ fun LobbyIAmInitiator(lobby: LobbyItemModel, vm: TestViewModel, navController: N
 fun FuckingUserInMyLobby(
     user: LobbyUserShortInfo,
     isLongPress: Boolean = false,
+    showStatus: Boolean = true,
     onClick: () -> Unit,
 ) {
     LaunchedEffect(Unit) {
@@ -183,12 +186,17 @@ fun FuckingUserInMyLobby(
             }
         }
 
-        Box(contentAlignment = Alignment.CenterEnd) {
-            Column() {
-                Text(text = "Role = ${Role.fromInt(user.role).description}")
-                Text(text = "Status = ${IsAccepted.fromInt(user.accepted).description}")
+        if (showStatus) {
+            Box(contentAlignment = Alignment.CenterEnd) {
+                Column() {
+                    Text(modifier = Modifier.padding(horizontal = 7.dp),
+                        text = IsAccepted.fromInt(user.accepted).description,
+                        fontSize = 18.sp,
+                        fontStyle = FontStyle.Italic)
+                }
             }
         }
+
 
     }
 }

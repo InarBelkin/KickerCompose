@@ -147,8 +147,9 @@ class BattlePart @Inject constructor(
                     it.position = 0
                 }
                 lobbyMessages.inviteOne(invitedId, inviteMessage)
-            }
-            return MessageBase(true, "Success!")
+                return MessageBase(true, "Success!")
+            } else
+                return MessageBase(false, isCreated.message)
         }
 
     suspend fun checkStartBattle(): MessageBase {
@@ -201,7 +202,7 @@ class BattlePart @Inject constructor(
 
         val battleTime: Double = if (l.lastTimeStamp!!.battleState == BattleStatus.Started.num) {
             val dif =
-                Duration.between(LocalDateTime.now(ZoneOffset.UTC), l.timeStamps.last().globalTime)
+                Duration.between(l.timeStamps.last().globalTime, LocalDateTime.now(ZoneOffset.UTC))
             dif.seconds + l.timeStamps.last().battleTime
         } else l.lastTimeStamp!!.battleTime
 

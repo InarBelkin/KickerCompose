@@ -1,12 +1,10 @@
 package com.inar.kickercompose.ui.lobby.one
 
-import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -27,8 +25,8 @@ import com.inar.kickercompose.other.strangeNavigate
 import com.inar.kickercompose.ui.lobby.LobbyFuns
 import com.inar.kickercompose.ui.navigation.NavigationItems
 import com.inar.kickercompose.ui.navigation.showAlert
+import com.inar.kickercompose.ui.theme.KickerColors
 import com.inar.kickercompose.ui.theme.utils.BorderedButton
-import com.inar.kickercompose.ui.userpage.StrokePseudoButton
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -43,7 +41,7 @@ object MyLobbyScreens {
         val context = LocalContext.current
         val scope = rememberCoroutineScope()
 
-        Button(modifier = Modifier.fillMaxWidth(), onClick = {
+        BorderedButton(text = "Start!") {
             scope.launch {
                 val rez = vm.battle.checkStartBattle()
                 if (!rez.success) {
@@ -51,20 +49,12 @@ object MyLobbyScreens {
                 } else
                     vm.battle.startBattle()
             }
-        }) {
-            Text(text = "Start!")   //maybe add animation loading while lobby is updating on server?
         }
 
-        Button(modifier = Modifier.fillMaxWidth(), onClick = {
+        BorderedButton(text = "Stop!", color = KickerColors.dangerous, isLongPress = true) {
             scope.launch {
                 LobbyFuns.StopGame(context, vm, navController)
             }
-        }) {
-            Text(text = "Stop!")
-        }
-
-        BorderedButton(text = "Stop!") {
-
         }
 
         StartBattleAlert(isOpen = isStartBattleWinOpen, vm = vm) {
@@ -95,28 +85,22 @@ object MyLobbyScreens {
             horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text = String.format("%.1f", time), fontSize = 40.sp)
 
-            Button(modifier = Modifier.fillMaxWidth(), onClick = {
+            BorderedButton(text = "Pause") {
                 scope.launch {
                     vm.battle.pauseBattle()
                 }
-            }) {
-                Text(text = "Pause")
             }
 
-            Button(modifier = Modifier.fillMaxWidth(), onClick = {
+            BorderedButton(text = "Complete the battle") {
                 scope.launch {
                     vm.battle.startEnterResultsBattle()
                 }
-            }) {
-                Text(text = "Complete the battle")
             }
 
-            Button(modifier = Modifier.fillMaxWidth(), onClick = {
+            BorderedButton(text = "Stop!", color = KickerColors.dangerous, isLongPress = true) {
                 scope.launch {
                     LobbyFuns.StopGame(context, vm, navController)
                 }
-            }) {
-                Text(text = "Stop!")
             }
         }
     }
@@ -135,29 +119,26 @@ object MyLobbyScreens {
             Text(text = String.format("%.1f", lobby.lastTimeStamp?.battleTime ?: 0),
                 fontSize = 40.sp)
 
-            Button(modifier = Modifier.fillMaxWidth(), onClick = {
+            BorderedButton(text = "Resume") {
                 scope.launch {
                     vm.battle.resumeBattle()
                 }
-            }) {
-                Text(text = "Resume")
             }
 
-            Button(modifier = Modifier.fillMaxWidth(), onClick = {
+
+            BorderedButton(text = "Complete the battle") {
                 scope.launch {
                     vm.battle.startEnterResultsBattle()
                 }
-            }) {
-                Text(text = "Complete the battle")
             }
 
-            Button(modifier = Modifier.fillMaxWidth(), onClick = {
+
+            BorderedButton(text = "Stop!", color = KickerColors.dangerous, isLongPress = true) {
                 scope.launch {
                     LobbyFuns.StopGame(context, vm, navController)
                 }
-            }) {
-                Text(text = "Stop!")
             }
+
         }
     }
 
@@ -172,6 +153,9 @@ object MyLobbyScreens {
 
         var isAWinner by remember { mutableStateOf<Boolean?>(lobby.result.isWinnerA) }
         var countOfGoals by remember { mutableStateOf(lobby.result.countOfGoalsLoser) }
+        Text(text = String.format("%.1f", lobby.lastTimeStamp?.battleTime ?: 0),
+            fontSize = 40.sp)
+
         Text(text = "Who won?")
         Row(modifier = Modifier.fillMaxWidth()) {
             Card(
@@ -220,7 +204,7 @@ object MyLobbyScreens {
             default = lobby.result.countOfGoalsLoser,
             onValueChange = { countOfGoals = it })
 
-        Button(modifier = Modifier.fillMaxWidth(), onClick = {
+        BorderedButton(text = "Send result!") {
             scope.launch {
                 messageBaseAlertWrapper(context) {
                     vm.battle.sendBattleResults(ResultDto().apply {
@@ -234,9 +218,15 @@ object MyLobbyScreens {
                     }
                 }
             }
-        }) {
-            Text(text = "Send result!")
         }
+
+
+        BorderedButton(text = "Stop!", color = KickerColors.dangerous, isLongPress = true) {
+            scope.launch {
+                LobbyFuns.StopGame(context, vm, navController)
+            }
+        }
+
     }
 
     @Composable

@@ -156,7 +156,9 @@ fun UserShortItem(user: LobbyUserShortInfo, vm: TestViewModel) {
                     .clip(CircleShape)
             )
             Column(verticalArrangement = Arrangement.Center) {
-                Text(text = user.name, softWrap = true)
+                if (user.id != null) {
+                    Text(text = user.name, softWrap = true)
+                }
                 Text(text = IsAccepted.fromInt(user.accepted).description)
             }
         }

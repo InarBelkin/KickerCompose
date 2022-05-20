@@ -28,12 +28,12 @@ class UserDetails {
             listOf(
                 "Battles count 1x1" to it.battlesCount.toString(),
                 "Percent of wins" to if (it.battlesCount > 10)
-                    it.winsCount.toDouble().div(it.battlesCount).toInt().toString() + "%"
+                    it.winsCount.toDouble().div(it.battlesCount).times(100).toInt().toString() + "%"
                 else "not enough battles",
                 "ELO" to it.elo.toString(),
                 "Wins count" to it.winsCount.toString(),
                 "Defeats count" to it.battlesCount.minus(it.winsCount).toString(),
-                "Count of goals" to it.goalsCount.toString(),
+                // "Count of goals" to it.goalsCount.toString(),TODO: return it!
             )
         }
     }

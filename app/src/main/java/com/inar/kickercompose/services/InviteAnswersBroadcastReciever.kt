@@ -31,7 +31,7 @@ class InviteAnswersBroadcastReceiver : BroadcastReceiver() {
         }
 
         Log.i("broadcast", "cancel invite")
-        Toast.makeText(context, "Reciever is working", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "Reciever is working", Toast.LENGTH_SHORT).show();
 
     }
 
